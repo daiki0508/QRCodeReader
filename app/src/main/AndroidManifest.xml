@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRCodeReader" >
         <activity
-            android:name=".ui.main.afterscan.AfterScanActivity"
+            android:name="com.websarva.wings.android.qrcodereader.ui.afterscan.AfterScanActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
