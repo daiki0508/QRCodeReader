@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui
+package com.websarva.wings.android.qrcodereader.ui.main
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.google.zxing.integration.android.IntentIntegrator
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
+import com.websarva.wings.android.qrcodereader.ui.main.afterscan.AfterScanActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -33,7 +34,12 @@ class MainActivity : AppCompatActivity() {
 
         if (result != null){
             Log.d("scanResult", result.contents)
-            // TODO("未実装")
+            Intent(this, AfterScanActivity::class.java).apply {
+                this.putExtra("scanUrl", /*result.contents*/"file://hogehoge")
+                startActivity(this)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            }
         }else{
             super.onActivityResult(requestCode, resultCode, data)
         }
