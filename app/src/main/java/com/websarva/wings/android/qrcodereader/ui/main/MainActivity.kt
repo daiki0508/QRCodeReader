@@ -7,9 +7,12 @@ import android.util.Log
 import com.google.zxing.integration.android.IntentIntegrator
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.main.afterscan.AfterScanActivity
+import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModel()
 
     private lateinit var qrScanIntegrator: IntentIntegrator
 
@@ -20,13 +23,9 @@ class MainActivity : AppCompatActivity() {
             setContentView(this.root)
         }
 
+        // qrコードライブラリの設定
         this.qrScanIntegrator = IntentIntegrator(this)
-        // 縦画面に固定
-        this.qrScanIntegrator.setOrientationLocked(false)
-        // ヒープ音停止
-        this.qrScanIntegrator.setBeepEnabled(false)
-        // スキャン開始
-        this.qrScanIntegrator.initiateScan()
+        viewModel.initQRScanIntegrator(this.qrScanIntegrator)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
