@@ -12,7 +12,7 @@ import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerView.Recycle
 class AfterScanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAfterScanBinding
 
-    private lateinit var scanUrl: Uri
+    private lateinit var scanUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,18 +22,18 @@ class AfterScanActivity : AppCompatActivity() {
         }
 
         // intentを取得
-        scanUrl = Uri.parse(intent.getStringExtra("scanUrl"))
+        scanUri = Uri.parse(intent.getStringExtra("scanUrl"))
 
         // ヴァリデーションチェック
-        if (scanUrl.scheme == "http" || scanUrl.scheme == "https"){
-            binding.scanUrl.text = scanUrl.toString()
+        if (scanUri.scheme == "http" || scanUri.scheme == "https"){
+            binding.scanUrl.text = scanUri.toString()
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
             finish()
         }
 
         // recyclerview
-        val actionRecyclerViewAdapter = RecyclerViewAdapter()
+        val actionRecyclerViewAdapter = RecyclerViewAdapter(this, scanUri)
         binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
         binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         binding.selectRecyclerView.layoutManager = LinearLayoutManager(this)
