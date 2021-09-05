@@ -12,7 +12,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,26 +20,7 @@ class MainActivity : AppCompatActivity() {
             setContentView(this.root)
         }
 
-        val mainFragment = MainFragment()
-        val transaction = supportFragmentManager.beginTransaction()
-
-        transaction.replace(binding.container.id, mainFragment)
-        transaction.commit()
+        // fragmentの起動
+        supportFragmentManager.beginTransaction().replace(binding.container.id, MainFragment()).commit()
     }
-
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-
-        if (result != null){
-            Log.d("scanResult", result.contents)
-            Intent(this, AfterScanActivity::class.java).apply {
-                this.putExtra("scanUrl", result.contents)
-                startActivity(this)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()
-            }
-        }else{
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }*/
 }

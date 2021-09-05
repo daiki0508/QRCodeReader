@@ -14,8 +14,6 @@ import com.websarva.wings.android.qrcodereader.ui.main.MainActivity
 class AfterScanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAfterScanBinding
 
-    private lateinit var scanUri: Uri
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,22 +21,8 @@ class AfterScanActivity : AppCompatActivity() {
             setContentView(this.root)
         }
 
-        // intentを取得
-        scanUri = Uri.parse(intent.getStringExtra("scanUrl"))
-
-        // ヴァリデーションチェック
-        if (scanUri.scheme == "http" || scanUri.scheme == "https"){
-            binding.scanUrl.text = scanUri.toString()
-        }else{
-            Log.e("ERROR", "不正な操作が行われた可能性があります。")
-            finish()
-        }
-
-        // recyclerview
-        val actionRecyclerViewAdapter = RecyclerViewAdapter(this, scanUri)
-        binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
-        binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        binding.selectRecyclerView.layoutManager = LinearLayoutManager(this)
+        // fragmentの起動
+        supportFragmentManager.beginTransaction().replace(binding.container.id, AfterScanFragment()).commit()
     }
 
     override fun onBackPressed() {
