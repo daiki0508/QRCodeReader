@@ -1,14 +1,10 @@
 package com.websarva.wings.android.qrcodereader.ui.main
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.google.zxing.integration.android.IntentIntegrator
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
-import com.websarva.wings.android.qrcodereader.ui.afterscan.AfterScanActivity
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // fragmentの起動
-        supportFragmentManager.beginTransaction().replace(binding.container.id, MainFragment()).commit()
+        supportFragmentManager.beginTransaction().add(binding.container.id, MainFragment()).commit()
+        supportFragmentManager.beginTransaction().add(binding.fragment.id, BottomNavFragment()).commit()
     }
 }

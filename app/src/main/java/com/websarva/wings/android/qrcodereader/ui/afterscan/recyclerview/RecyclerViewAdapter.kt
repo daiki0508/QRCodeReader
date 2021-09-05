@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerView
+package com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerview
 
 import android.app.Activity
 import android.content.*

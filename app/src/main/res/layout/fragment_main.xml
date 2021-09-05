@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dfe">
+    android:background="#dfe"
+    tool:context=".ui.main.MainActivity">
 
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
+        android:id="@+id/barcodeView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

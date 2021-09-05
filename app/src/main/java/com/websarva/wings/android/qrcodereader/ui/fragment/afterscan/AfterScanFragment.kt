@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.afterscan
+package com.websarva.wings.android.qrcodereader.ui.fragment.afterscan
 
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
-import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerView.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerview.RecyclerViewAdapter
 
 class AfterScanFragment: Fragment() {
     private var _binding: FragmentAfterscanBinding? = null
@@ -32,10 +32,9 @@ class AfterScanFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // intentを取得
-        activity?.let {
-            scanUri = Uri.parse(it.intent.getStringExtra("scanUrl"))
+        scanUri = Uri.parse(arguments?.getString("scanUrl"))
 
+        activity?.let {
             // ヴァリデーションチェック
             if (scanUri.scheme == "http" || scanUri.scheme == "https"){
                 binding.scanUrl.text = scanUri.toString()
