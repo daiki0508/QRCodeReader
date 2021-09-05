@@ -14,8 +14,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModel()
 
-    private lateinit var qrScanIntegrator: IntentIntegrator
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,12 +21,14 @@ class MainActivity : AppCompatActivity() {
             setContentView(this.root)
         }
 
-        // qrコードライブラリの設定
-        this.qrScanIntegrator = IntentIntegrator(this)
-        viewModel.initQRScanIntegrator(this.qrScanIntegrator)
+        val mainFragment = MainFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+
+        transaction.replace(binding.container.id, mainFragment)
+        transaction.commit()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
 
         if (result != null){
@@ -42,5 +42,5 @@ class MainActivity : AppCompatActivity() {
         }else{
             super.onActivityResult(requestCode, resultCode, data)
         }
-    }
+    }*/
 }

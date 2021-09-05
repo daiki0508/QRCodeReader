@@ -1,5 +1,6 @@
 package com.websarva.wings.android.qrcodereader.ui.afterscan
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.ActivityAfterScanBinding
 import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerView.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.ui.main.MainActivity
 
 class AfterScanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAfterScanBinding
@@ -37,5 +39,11 @@ class AfterScanActivity : AppCompatActivity() {
         binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
         binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         binding.selectRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
+
+    override fun onBackPressed() {
+        Intent(this, MainActivity::class.java).apply {
+            startActivity(this)
+        }
     }
 }
