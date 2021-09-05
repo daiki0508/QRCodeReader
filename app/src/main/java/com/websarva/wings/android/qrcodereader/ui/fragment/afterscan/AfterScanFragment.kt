@@ -1,5 +1,6 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.afterscan
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +32,9 @@ class AfterScanFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 画面回転を固定する
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
 
         scanUri = Uri.parse(arguments?.getString("scanUrl"))
 

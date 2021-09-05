@@ -17,7 +17,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         // fragmentの起動
-        supportFragmentManager.beginTransaction().add(binding.container.id, MainFragment()).commit()
-        supportFragmentManager.beginTransaction().add(binding.fragment.id, BottomNavFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(binding.container.id, MainFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
+    }
+
+    override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        fragmentManager.popBackStack()
     }
 }

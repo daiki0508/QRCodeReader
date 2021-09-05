@@ -1,5 +1,6 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.main
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,24 +37,28 @@ class MainFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // qrコードライブラリの設定
-        val formats = listOf(BarcodeFormat.QR_CODE)
-        barcodeView = binding.barcodeView
-        barcodeView.decoderFactory = DefaultDecoderFactory(formats)
-        barcodeView.cameraSettings.isAutoFocusEnabled = true
-        barcodeView.decodeSingle { result ->
-            Log.d("scanResult", result.text)
-            val bundle = Bundle()
-            bundle.putString("scanUrl", result.text)
-            val afterScanFragment = AfterScanFragment()
-            afterScanFragment.arguments = bundle
+        // 画面回転を端末の傾きに依存する
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 
-            activity?.let {
-                val fragmentManager = it.supportFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-                transaction.addToBackStack(null)
-                transaction.replace(R.id.container, afterScanFragment).commit()
-            }
+        val afterScanFragment = AfterScanFragment()
+        viewModel.init(afterScanFragment)
+
+        // qrコードライブラリの設定
+        barcodeView = binding.barcodeView
+        viewModel.initBarcodeView(barcodeView)
+
+        activity?.let {
+            viewModel.flag().observe(it, { flag ->
+                // flagをチェック
+                if (flag){
+                    viewModel.clearBundle()
+                    // fragment遷移
+                    val fragmentManager = it.supportFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.addToBackStack(null)
+                    transaction.replace(R.id.container, afterScanFragment).commit()
+                }
+            })
         }
     }
 
