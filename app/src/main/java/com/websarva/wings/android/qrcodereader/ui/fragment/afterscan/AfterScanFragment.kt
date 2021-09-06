@@ -8,17 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerview.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AfterScanFragment: Fragment() {
     private var _binding: FragmentAfterscanBinding? = null
     private val binding
     get() = _binding!!
-
-    private lateinit var scanUri: Uri
+    private val viewModel by sharedViewModel<AfterScanViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,27 +35,28 @@ class AfterScanFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 画面回転を固定する
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-
-        scanUri = Uri.parse(arguments?.getString("scanUrl"))
-
         activity?.let {
-            // ヴァリデーションチェック
-            if (scanUri.scheme == "http" || scanUri.scheme == "https"){
-                binding.scanUrl.text = scanUri.toString()
-            }else{
-                Log.e("ERROR", "不正な操作が行われた可能性があります。")
+            viewModel.init(it, arguments?.getString("scanUrl")!!, this)
+
+            // recyclerview
+            val actionRecyclerViewAdapter = RecyclerViewAdapter(it, viewModel.scanUri().value!!)
+            binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
+            binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
+            binding.selectRecyclerView.layoutManager = LinearLayoutManager(it)
+        }
+    }
+
+    fun afterValidationCheck(valFlag: Boolean){
+        // OKはtrue
+        if (valFlag){
+            binding.scanUrl.text = viewModel.scanUri().value.toString()
+        }else{
+            Log.e("ERROR", "不正な操作が行われた可能性があります。")
+            activity?.let {
                 val fragmentManager = it.supportFragmentManager
                 fragmentManager.beginTransaction().remove(this).commit()
                 it.finish()
             }
-
-            // recyclerview
-            val actionRecyclerViewAdapter = RecyclerViewAdapter(it, scanUri)
-            binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
-            binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
-            binding.selectRecyclerView.layoutManager = LinearLayoutManager(it)
         }
     }
 
