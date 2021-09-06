@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainViewModel: ViewModel() {
-    private val _state = MutableLiveData<Int>().apply {
+    private val _state = MutableLiveData<Int?>().apply {
         MutableLiveData<Int>()
     }
 
@@ -12,7 +12,11 @@ class MainViewModel: ViewModel() {
         _state.value = state
     }
 
-    fun state(): MutableLiveData<Int>{
+    fun state(): MutableLiveData<Int?>{
         return _state
+    }
+
+    init {
+        _state.value = null
     }
 }

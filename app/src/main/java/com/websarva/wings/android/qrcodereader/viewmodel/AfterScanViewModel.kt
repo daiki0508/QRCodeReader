@@ -24,9 +24,6 @@ class AfterScanViewModel: ViewModel() {
         this.activity.value = activity
         this.fragment.value = fragment
 
-        // 画面回転を固定する
-        this.activity.value!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
-
         // ヴァリデーションチェック
         validationCheck()
     }

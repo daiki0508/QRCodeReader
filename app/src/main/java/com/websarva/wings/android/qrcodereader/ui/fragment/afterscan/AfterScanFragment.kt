@@ -41,6 +41,7 @@ class AfterScanFragment: Fragment() {
         mainViewModel.setState(1)
 
         activity?.let {
+            // 初期設定
             viewModel.init(it, arguments?.getString("scanUrl")!!, this)
 
             // recyclerview

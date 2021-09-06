@@ -3,7 +3,9 @@ package com.websarva.wings.android.qrcodereader.ui.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
+import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,8 +22,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // fragmentの起動
-        supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
-        supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
+        if (viewModel.state().value == null){
+            supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
+        }
     }
 
     override fun onBackPressed() {

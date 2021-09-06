@@ -33,9 +33,6 @@ class ScanViewModel: ViewModel() {
         _barcodeView.value = barcodeView
         _mainFragment.value = scanFragment
 
-        // 画面回転を端末の傾きに依存する
-        _activity.value!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-
         // barcodeViewの設定
         initBarcodeView()
     }
