@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerview.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AfterScanFragment: Fragment() {
     private var _binding: FragmentAfterscanBinding? = null
     private val binding
     get() = _binding!!
+
     private val viewModel by sharedViewModel<AfterScanViewModel>()
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +37,8 @@ class AfterScanFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainViewModel.setState(1)
 
         activity?.let {
             viewModel.init(it, arguments?.getString("scanUrl")!!, this)

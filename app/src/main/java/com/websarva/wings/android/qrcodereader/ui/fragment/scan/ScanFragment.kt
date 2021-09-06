@@ -1,26 +1,23 @@
-package com.websarva.wings.android.qrcodereader.ui.fragment.main
+package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.zxing.BarcodeFormat
-import com.journeyapps.barcodescanner.CompoundBarcodeView
-import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentMainBinding
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class MainFragment: Fragment() {
+class ScanFragment: Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding
     get() = _binding!!
-    private val viewModel by sharedViewModel<MainViewModel>()
+
+    private val viewModel by sharedViewModel<ScanViewModel>()
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +32,9 @@ class MainFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 現在のfragmentをmainViewModelに通知
+        mainViewModel.setState(0)
+
         activity?.let {
             viewModel.init(it, binding.barcodeView, this)
         }
@@ -42,6 +42,7 @@ class MainFragment: Fragment() {
 
     fun afterScanFragment(){
         activity?.let {
+            // afterScanFragmentへの遷移
             val fragmentManager = it.supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.addToBackStack(null)
