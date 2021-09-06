@@ -2,17 +2,26 @@ package com.websarva.wings.android.qrcodereader.viewmodel
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.text.format.DateFormat
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import com.websarva.wings.android.qrcodereader.model.SaveData
+import com.websarva.wings.android.qrcodereader.repository.PreferenceRepository
+import com.websarva.wings.android.qrcodereader.repository.PreferenceRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
+import kotlinx.coroutines.launch
+import java.util.*
 
-class ScanViewModel: ViewModel() {
+class ScanViewModel(
+    private val preferenceRepository: PreferenceRepositoryClient
+): ViewModel() {
     private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
         MutableLiveData<AfterScanFragment>()
     }
@@ -50,13 +59,19 @@ class ScanViewModel: ViewModel() {
         barcodeView.decodeSingle {
             Log.d("scanResult", it.text)
 
-            // bundleへのデータセットと値の受け渡し準備
-            val bundle = Bundle()
-            bundle.putString("scanUrl", it.text)
-            _afterScanFragment.value!!.arguments = bundle
+            viewModelScope.launch {
+                // 履歴を作成、保存
+                val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
+                preferenceRepository.write(_activity.value!!, keyName = it.text, SaveData(title = it.text, type = 0, time = date.toString()))
 
-            // viewへ処理を渡す
-            _mainFragment.value!!.afterScanFragment()
+                // bundleへのデータセットと値の受け渡し準備
+                val bundle = Bundle()
+                bundle.putString("scanUrl", it.text)
+                _afterScanFragment.value!!.arguments = bundle
+
+                // viewへ処理を渡す
+                _mainFragment.value!!.afterScanFragment()
+            }
         }
     }
 
