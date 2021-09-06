@@ -10,6 +10,8 @@ import com.websarva.wings.android.qrcodereader.model.SaveData
 
 interface PreferenceRepository {
     suspend fun write(activity: FragmentActivity, keyName: String, data: SaveData)
+    suspend fun read(activity: FragmentActivity, keyName: String): SaveData
+    suspend fun keyList(activity: FragmentActivity):SaveData
 }
 
 class PreferenceRepositoryClient: PreferenceRepository{
@@ -18,9 +20,30 @@ class PreferenceRepositoryClient: PreferenceRepository{
             putString("${keyName}_${History.Title}", data.title)
             putInt("${keyName}_${History.Type}", data.type)
             putString("${keyName}_${History.Time}", data.time)
+
+            // keyListを作成、保存
+            if (createPreference(activity).getString(History.List.name, "").isNullOrBlank()){
+                putString(History.List.name, keyName)
+            }else{
+                putString(History.List.name, "${createPreference(activity).getString(History.List.name, "")}\n${keyName}")
+            }
             apply()
         }
         Log.i("preference_write", "Success!!")
+    }
+
+    override suspend fun read(activity: FragmentActivity, keyName: String): SaveData {
+        createPreference(activity).let {
+            return SaveData(
+                title = it.getString("${keyName}_${History.Title}", "")!!,
+                type = it.getInt("${keyName}_${History.Type}", 0),
+                time = it.getString("${keyName}_${History.Time}", "")!!
+            )
+        }
+    }
+
+    override suspend fun keyList(activity: FragmentActivity): SaveData {
+        return SaveData(list = createPreference(activity).getString(History.List.name, "")!!)
     }
 
     private fun createPreference(activity: FragmentActivity): SharedPreferences {
