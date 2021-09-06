@@ -30,11 +30,12 @@ class AfterScanViewModel: ViewModel() {
         // ヴァリデーションチェック
         validationCheck()
     }
-
     private fun validationCheck(){
         if (_scanUri.value!!.scheme == "http" || _scanUri.value!!.scheme == "https"){
+            // viewへ処理を渡す
             fragment.value!!.afterValidationCheck(valFlag = true)
         }else{
+            // viewへ処理を渡す
             fragment.value!!.afterValidationCheck(valFlag = false)
         }
     }

@@ -1,7 +1,9 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.zxing.BarcodeFormat
@@ -9,46 +11,63 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.main.MainFragment
 
 class MainViewModel: ViewModel() {
-    private val _flag = MutableLiveData<Boolean>().apply {
-        MutableLiveData<Boolean>()
+    private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
+        MutableLiveData<AfterScanFragment>()
+    }
+    private val _mainFragment = MutableLiveData<MainFragment>().apply {
+        MutableLiveData<MainFragment>()
+    }
+    private val _activity = MutableLiveData<FragmentActivity>().apply {
+        MutableLiveData<FragmentActivity>()
+    }
+    private val _barcodeView = MutableLiveData<CompoundBarcodeView>().apply {
+        MutableLiveData<CompoundBarcodeView>()
     }
 
-    private lateinit var afterScanFragment: AfterScanFragment
+    fun init(activity: FragmentActivity, barcodeView: CompoundBarcodeView, mainFragment: MainFragment){
+        // activityやfragmentをグローバル変数に代入
+        _activity.value = activity
+        _afterScanFragment.value  = AfterScanFragment()
+        _barcodeView.value = barcodeView
+        _mainFragment.value = mainFragment
 
-    fun initBarcodeView(barcodeView: CompoundBarcodeView){
-        val formats = listOf(BarcodeFormat.QR_CODE)
-        barcodeView.decoderFactory = DefaultDecoderFactory(formats)
-        barcodeView.cameraSettings.isAutoFocusEnabled = true
+        // 画面回転を端末の傾きに依存する
+        _activity.value!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 
-        // scan開始と結果取得
-        scanResult(barcodeView)
+        // barcodeViewの設定
+        initBarcodeView()
     }
+    private fun initBarcodeView(){
+        _barcodeView.value?.let {
+            val formats = listOf(BarcodeFormat.QR_CODE)
+            it.decoderFactory = DefaultDecoderFactory(formats)
+            it.cameraSettings.isAutoFocusEnabled = true
 
+            // scan開始と結果取得
+            scanResult(it)
+        }
+    }
     private fun scanResult(barcodeView: CompoundBarcodeView){
         barcodeView.decodeSingle {
             Log.d("scanResult", it.text)
+
+            // bundleへのデータセットと値の受け渡し準備
             val bundle = Bundle()
             bundle.putString("scanUrl", it.text)
-            afterScanFragment.arguments = bundle
-            // viewに通知
-            _flag.value = true
+            _afterScanFragment.value!!.arguments = bundle
+
+            // viewへ処理を渡す
+            _mainFragment.value!!.afterScanFragment()
         }
     }
 
-    fun init(afterScanFragment: AfterScanFragment){
-        this.afterScanFragment = afterScanFragment
+    fun barcodeView(): MutableLiveData<CompoundBarcodeView>{
+        return _barcodeView
     }
-    fun clearBundle(){
-        _flag.value = false
-    }
-
-    fun flag(): MutableLiveData<Boolean>{
-        return _flag
-    }
-
-    init {
-        _flag.value = false
+    fun afterScanFragment(): MutableLiveData<AfterScanFragment>{
+        return _afterScanFragment
     }
 }

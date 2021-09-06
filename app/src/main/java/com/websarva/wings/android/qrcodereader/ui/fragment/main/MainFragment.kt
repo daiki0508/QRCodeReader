@@ -22,8 +22,6 @@ class MainFragment: Fragment() {
     get() = _binding!!
     private val viewModel by sharedViewModel<MainViewModel>()
 
-    private lateinit var barcodeView: CompoundBarcodeView
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,41 +35,30 @@ class MainFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 画面回転を端末の傾きに依存する
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-
-        val afterScanFragment = AfterScanFragment()
-        viewModel.init(afterScanFragment)
-
-        // qrコードライブラリの設定
-        barcodeView = binding.barcodeView
-        viewModel.initBarcodeView(barcodeView)
-
         activity?.let {
-            viewModel.flag().observe(it, { flag ->
-                // flagをチェック
-                if (flag){
-                    viewModel.clearBundle()
-                    // fragment遷移
-                    val fragmentManager = it.supportFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.addToBackStack(null)
-                    transaction.replace(R.id.container, afterScanFragment).commit()
-                }
-            })
+            viewModel.init(it, binding.barcodeView, this)
+        }
+    }
+
+    fun afterScanFragment(){
+        activity?.let {
+            val fragmentManager = it.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.addToBackStack(null)
+            transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
         }
     }
 
     override fun onResume() {
         super.onResume()
 
-        barcodeView.resume()
+        viewModel.barcodeView().value!!.resume()
     }
 
     override fun onPause() {
         super.onPause()
 
-        barcodeView.pause()
+        viewModel.barcodeView().value!!.pause()
     }
 
     override fun onDestroyView() {
