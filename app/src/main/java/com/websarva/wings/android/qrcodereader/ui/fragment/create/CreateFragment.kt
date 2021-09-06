@@ -30,5 +30,7 @@ class CreateFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mainViewModel.setState(2)
+
+
     }
 }
