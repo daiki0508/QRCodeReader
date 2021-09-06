@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentBottomnavBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
@@ -32,27 +33,30 @@ class BottomNavFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.bottomNav.setOnItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.scan -> {
-                    if (viewModel.state().value != 0){
-                        activity?.let {
-                            val fragmentManager = it.supportFragmentManager
+        activity?.let {
+            val fragmentManager = it.supportFragmentManager
+            binding.bottomNav.setOnItemSelectedListener { item ->
+                when(item.itemId){
+                    R.id.scan -> {
+                        if (viewModel.state().value != 0){
                             fragmentManager.beginTransaction().replace(R.id.container, ScanFragment()).commit()
                         }
+                        true
                     }
-                    true
-                }
-                R.id.create -> {
-                    if (viewModel.state().value != 2){
-                        activity?.let {
-                            val fragmentManager = it.supportFragmentManager
+                    R.id.create -> {
+                        if (viewModel.state().value != 2){
                             fragmentManager.beginTransaction().replace(R.id.container, CreateFragment()).commit()
                         }
+                        true
                     }
-                    true
+                    R.id.history ->{
+                        if (viewModel.state().value != 3){
+                            fragmentManager.beginTransaction().replace(R.id.container, HistoryFragment()).commit()
+                        }
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
         }
     }

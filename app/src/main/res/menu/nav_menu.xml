@@ -11,4 +11,10 @@
         android:title="コード生成"
         android:icon="@drawable/ic_baseline_qr_code_24"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/history"
+        android:title="履歴"
+        android:icon="@drawable/ic_baseline_history_24"
+        app:showAsAction="ifRoom" />
 </menu>

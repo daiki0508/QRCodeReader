@@ -1,18 +1,15 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.afterscan
 
-import android.content.pm.ActivityInfo
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
-import com.websarva.wings.android.qrcodereader.ui.afterscan.recyclerview.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
