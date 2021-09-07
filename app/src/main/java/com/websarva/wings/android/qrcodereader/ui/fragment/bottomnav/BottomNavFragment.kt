@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentBottomnavBinding
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class BottomNavFragment: Fragment() {
@@ -54,7 +54,7 @@ class BottomNavFragment: Fragment() {
                                 }else{
                                     transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
                                 }
-                                transaction.replace(R.id.container, CreateFragment()).commit()
+                                transaction.replace(R.id.container, SelectFragment()).commit()
                             }
                         }
                         true

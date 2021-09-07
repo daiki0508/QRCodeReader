@@ -8,18 +8,18 @@ import androidx.lifecycle.ViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
 
 class CreateViewModel: ViewModel() {
-    private val _fragment = MutableLiveData<CreateFragment>().apply {
-        MutableLiveData<CreateFragment>()
+    private val _fragment = MutableLiveData<CreateUrlFragment>().apply {
+        MutableLiveData<CreateUrlFragment>()
     }
     private val _qrBitmap = MutableLiveData<Bitmap>().apply {
         MutableLiveData<String>()
     }
 
-    fun init(fragment: CreateFragment){
-        _fragment.value = fragment
+    fun init(urlFragment: CreateUrlFragment){
+        _fragment.value = urlFragment
     }
     fun validationCheck(url: String){
         val uri = Uri.parse(url)

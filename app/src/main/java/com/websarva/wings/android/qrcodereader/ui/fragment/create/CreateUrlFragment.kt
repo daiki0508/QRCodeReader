@@ -8,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateBinding
+import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateurlBinding
 import com.websarva.wings.android.qrcodereader.viewmodel.CreateViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CreateFragment: Fragment() {
-    private var _binding: FragmentCreateBinding? = null
+class CreateUrlFragment: Fragment() {
+    private var _binding: FragmentCreateurlBinding? = null
     private val binding
     get() = _binding!!
 
@@ -27,7 +27,7 @@ class CreateFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCreateBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateurlBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -37,7 +37,7 @@ class CreateFragment: Fragment() {
 
         // 初期設定
         viewModel.init(this)
-        mainViewModel.setState(2)
+        //mainViewModel.setState(2)
 
         // qrコード作成とvalidationCheck
         binding.btCreate.setOnClickListener {
