@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateMapFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 
 class RecyclerViewAdapter(
@@ -27,7 +29,13 @@ class RecyclerViewAdapter(
 
                 // タップ時の処理
                 holder.view.setOnClickListener {
-                    //TODO("未実装")
+                    activity.let {
+                        val fragmentManager = it.supportFragmentManager
+                        val transaction = fragmentManager.beginTransaction()
+                        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+                        transaction.addToBackStack(null)
+                        transaction.replace(R.id.container, CreateUrlFragment()).commit()
+                    }
                 }
             }
             1 -> {
@@ -36,7 +44,15 @@ class RecyclerViewAdapter(
 
                 // タップ時の処理
                 holder.view.setOnClickListener {
-                    //TODO("未実装")
+                    holder.view.setOnClickListener {
+                        activity.let {
+                            val fragmentManager = it.supportFragmentManager
+                            val transaction = fragmentManager.beginTransaction()
+                            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+                            transaction.addToBackStack(null)
+                            transaction.replace(R.id.container, CreateMapFragment()).commit()
+                        }
+                    }
                 }
             }
             else ->{

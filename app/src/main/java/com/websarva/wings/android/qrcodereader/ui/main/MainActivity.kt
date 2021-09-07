@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         viewModel.state().value?.let {
             when (it) {
-                1,3 -> {
+                1,3,4 -> {
                     supportFragmentManager.popBackStack()
                 }
                 else -> {

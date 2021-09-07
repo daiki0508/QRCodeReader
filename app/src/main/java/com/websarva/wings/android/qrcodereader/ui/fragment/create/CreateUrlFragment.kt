@@ -37,7 +37,7 @@ class CreateUrlFragment: Fragment() {
 
         // 初期設定
         viewModel.init(this)
-        //mainViewModel.setState(2)
+        mainViewModel.setState(4)
 
         // qrコード作成とvalidationCheck
         binding.btCreate.setOnClickListener {
