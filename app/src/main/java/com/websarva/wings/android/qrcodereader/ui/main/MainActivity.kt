@@ -2,10 +2,12 @@ package com.websarva.wings.android.qrcodereader.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,9 +31,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (viewModel.state().value == 1){
-            val fragmentManager = supportFragmentManager
-            fragmentManager.popBackStack()
+        viewModel.state().value?.let {
+            when (it) {
+                1,3 -> {
+                    supportFragmentManager.popBackStack()
+                }
+                else -> {
+
+                }
+            }
         }
     }
 }
