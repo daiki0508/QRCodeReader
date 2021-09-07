@@ -10,8 +10,10 @@ class MyModule {
         viewModel { MainViewModel() }
         viewModel { ScanViewModel(get()) }
         viewModel { AfterScanViewModel() }
-        viewModel { CreateViewModel() }
+        viewModel { CreateUrlViewModel() }
         viewModel { HistoryViewModel(get()) }
+        viewModel { CreateMapViewModel() }
+        viewModel { DisplayViewModel() }
     }
     val repository = module {
         factory { PreferenceRepositoryClient() }

@@ -1,15 +1,13 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.create
 
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateurlBinding
-import com.websarva.wings.android.qrcodereader.viewmodel.CreateViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.CreateUrlViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,7 +17,7 @@ class CreateUrlFragment: Fragment() {
     private val binding
     get() = _binding!!
 
-    private val viewModel: CreateViewModel by viewModel()
+    private val viewModel: CreateUrlViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     override fun onCreateView(
@@ -36,39 +34,21 @@ class CreateUrlFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 初期設定
-        viewModel.init(this)
         mainViewModel.setState(4)
+        viewModel.init(this, DisplayFragment())
 
         // qrコード作成とvalidationCheck
         binding.btCreate.setOnClickListener {
-            viewModel.validationCheck(binding.edUrl.text.toString())
-        }
-
-        // qrObserver
-        activity?.let {
-            viewModel.qrBitmap().observe(it, { bitmap ->
-                if (bitmap != null){
-                    binding.ivQR.setImageBitmap(bitmap)
-                }
-            })
+            viewModel.setBundle(binding.edUrl.text.toString())
         }
     }
-
-    fun blackToast(){
+    fun displayFragment(){
         activity?.let {
-            Toast.makeText(it, "作成したいurlが入力されていません。", Toast.LENGTH_SHORT).show()
-        }
-    }
-    fun exitError(){
-        activity?.let {
-            Log.e("ERROR", "不正な操作が行われた可能性があります。")
             val fragmentManager = it.supportFragmentManager
-            fragmentManager.beginTransaction().remove(this).commit()
-            it.finish()
+            val transaction = fragmentManager.beginTransaction()
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
         }
-    }
-    fun displayQRCode(bitmap: Bitmap){
-        binding.ivQR.setImageBitmap(bitmap)
     }
 
     override fun onDestroyView() {

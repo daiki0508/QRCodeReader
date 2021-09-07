@@ -15,14 +15,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateMapBinding
+import com.websarva.wings.android.qrcodereader.viewmodel.CreateMapViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateMapFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentCreateMapBinding? = null
     private val binding
     get() = _binding!!
 
+    private val viewModel: CreateMapViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var mMap: GoogleMap
@@ -41,14 +44,13 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         // 初期設定
-        mainViewModel.setState(5)
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        mainViewModel.setState(6)
         activity?.let {
-            val mapFragment = childFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            viewModel.init(it, this)
         }
+
+        // mapを起動
+        viewModel.initGoogleMap()
     }
 
     /**
@@ -65,8 +67,13 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         //TODO("未実装")
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        var location = LatLng(0.0, 0.0)
+        mMap.addMarker(MarkerOptions().position(location).title("Now Location"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10F))
+
+        // 地図タップ時の処理
+        mMap.setOnMapClickListener {
+            location = LatLng(it.latitude, it.longitude)
+        }
     }
 }
