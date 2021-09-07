@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
+import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceRepository
 import com.websarva.wings.android.qrcodereader.repository.PreferenceRepositoryClient
@@ -66,7 +67,7 @@ class ScanViewModel(
 
                 // bundleへのデータセットと値の受け渡し準備
                 val bundle = Bundle()
-                bundle.putString("scanUrl", it.text)
+                bundle.putString(IntentBundle.ScanUrl.name, it.text)
                 _afterScanFragment.value!!.arguments = bundle
 
                 // viewへ処理を渡す

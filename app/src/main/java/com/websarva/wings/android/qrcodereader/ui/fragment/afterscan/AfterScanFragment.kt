@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
+import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
@@ -39,7 +40,7 @@ class AfterScanFragment: Fragment() {
 
         activity?.let {
             // 初期設定
-            viewModel.init(it, arguments?.getString("scanUrl")!!, this)
+            viewModel.init(it, arguments?.getString(IntentBundle.ScanUrl.name)!!, this)
 
             // recyclerview
             val actionRecyclerViewAdapter = RecyclerViewAdapter(it, viewModel.scanUri().value!!)

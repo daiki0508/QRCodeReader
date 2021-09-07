@@ -39,19 +39,31 @@ class BottomNavFragment: Fragment() {
                 when(item.itemId){
                     R.id.scan -> {
                         if (viewModel.state().value != 0){
-                            fragmentManager.beginTransaction().replace(R.id.container, ScanFragment()).commit()
+                            val transaction = fragmentManager.beginTransaction()
+                            transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                            transaction.replace(R.id.container, ScanFragment()).commit()
                         }
                         true
                     }
                     R.id.create -> {
-                        if (viewModel.state().value != 2){
-                            fragmentManager.beginTransaction().replace(R.id.container, CreateFragment()).commit()
+                        viewModel.state().value?.let { state ->
+                            if (state != 2){
+                                val transaction = fragmentManager.beginTransaction()
+                                if (state == 0 || state == 1){
+                                    transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                                }else{
+                                    transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                                }
+                                transaction.replace(R.id.container, CreateFragment()).commit()
+                            }
                         }
                         true
                     }
                     R.id.history ->{
                         if (viewModel.state().value != 3){
-                            fragmentManager.beginTransaction().replace(R.id.container, HistoryFragment()).commit()
+                            val transaction = fragmentManager.beginTransaction()
+                            transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                            transaction.replace(R.id.container, HistoryFragment()).commit()
                         }
                         true
                     }

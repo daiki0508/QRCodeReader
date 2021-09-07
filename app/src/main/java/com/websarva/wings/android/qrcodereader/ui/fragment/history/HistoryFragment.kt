@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentHistoryBinding
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.history.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.HistoryViewModel
@@ -41,7 +42,7 @@ class HistoryFragment: Fragment() {
             viewModel.init(it, this)
         }
 
-        // recyclerViewの作成
+        // 履歴データの取得
         viewModel.getHistoryData()
     }
 
@@ -50,10 +51,17 @@ class HistoryFragment: Fragment() {
         binding.tvNoContents.visibility = View.GONE
 
         activity?.let {
-            val historyRecyclerViewAdapter = RecyclerViewAdapter(items)
+            val historyRecyclerViewAdapter = RecyclerViewAdapter(items, viewModel)
             binding.rvHistory.adapter = historyRecyclerViewAdapter
             binding.rvHistory.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
             binding.rvHistory.layoutManager = LinearLayoutManager(it)
+        }
+    }
+    fun afterScanFragment(){
+        activity?.let {
+            // afterScanFragmentへの遷移
+            val fragmentManager = it.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction().replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
         }
     }
 
