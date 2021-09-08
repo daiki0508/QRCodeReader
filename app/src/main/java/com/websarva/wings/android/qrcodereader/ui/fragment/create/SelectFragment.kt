@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.databinding.FragmentSelectBinding
-import com.websarva.wings.android.qrcodereader.ui.recyclerview.select.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.select.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

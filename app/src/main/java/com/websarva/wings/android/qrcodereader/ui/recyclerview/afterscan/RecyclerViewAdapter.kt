@@ -13,7 +13,7 @@ import com.websarva.wings.android.qrcodereader.R
 class RecyclerViewAdapter(private var activity: Activity, private var uri: Uri): RecyclerView.Adapter<RecyclerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.row_afterscan, parent, false)
+        val view = layoutInflater.inflate(R.layout.row_select, parent, false)
 
         return RecyclerViewHolder(view)
     }
@@ -22,7 +22,7 @@ class RecyclerViewAdapter(private var activity: Activity, private var uri: Uri):
         when(position){
             // Browserで開く
             0 -> {
-                holder.icon.setImageResource(R.drawable.ic_baseline_open_in_browser_24)
+                holder.icon.setImageResource(R.drawable.ic_baseline_open_in_browser_24_white)
                 holder.text.text = "ブラウザで開く"
 
                 // Browserで開くをタップ時の処理
@@ -42,7 +42,7 @@ class RecyclerViewAdapter(private var activity: Activity, private var uri: Uri):
             }
             // コピーする
             1 -> {
-                holder.icon.setImageResource(R.drawable.ic_baseline_content_copy_24)
+                holder.icon.setImageResource(R.drawable.ic_baseline_content_copy_24_white)
                 holder.text.text = "コピーする"
 
                 // コピーするをタップ時の処理
@@ -54,7 +54,7 @@ class RecyclerViewAdapter(private var activity: Activity, private var uri: Uri):
             }
             // 他のアプリで共有する
             2 -> {
-                holder.icon.setImageResource(R.drawable.ic_baseline_share_24)
+                holder.icon.setImageResource(R.drawable.ic_baseline_share_24_white)
                 holder.text.text = "他のアプリで共有する"
 
                 // タップ時の動作

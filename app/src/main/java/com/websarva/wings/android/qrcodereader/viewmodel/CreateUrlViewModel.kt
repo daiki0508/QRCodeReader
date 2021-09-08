@@ -20,13 +20,18 @@ class CreateUrlViewModel: ViewModel() {
         _displayFragment.value = displayFragment
     }
     fun setBundle(url: String){
-        // bundleに値をセット
-        val bundle = Bundle()
-        bundle.putString(IntentBundle.ScanUrl.name, url)
-        _displayFragment.value!!.arguments = bundle
+        // 空文字チェック
+        if (url.isNotBlank()){
+            // bundleに値をセット
+            val bundle = Bundle()
+            bundle.putString(IntentBundle.ScanUrl.name, url)
+            _displayFragment.value!!.arguments = bundle
 
-        // viewへ処理を渡す
-        _fragment.value!!.displayFragment()
+            // viewへ処理を渡す
+            _fragment.value!!.displayFragment()
+        }else{
+            _fragment.value!!.blackToast()
+        }
     }
 
     fun displayFragment(): MutableLiveData<DisplayFragment>{

@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.recyclerview.select
+package com.websarva.wings.android.qrcodereader.ui.recyclerview.create.select
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateMapFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
+import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
 
 class RecyclerViewAdapter(
     private val activity: FragmentActivity,

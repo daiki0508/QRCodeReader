@@ -23,7 +23,7 @@
                 android:layout_height="30dp"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_baseline_open_in_browser_24"/>
+                android:src="@drawable/ic_baseline_open_in_browser_24_white"/>
         </androidx.cardview.widget.CardView>
 
         <TextView

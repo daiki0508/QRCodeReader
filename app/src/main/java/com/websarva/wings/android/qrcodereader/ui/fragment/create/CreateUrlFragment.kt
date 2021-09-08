@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -53,12 +54,19 @@ class CreateUrlFragment: Fragment() {
         // 初期設定
         viewModel.init(this, DisplayFragment())
 
-        // qrコード作成とvalidationCheck
+        // qrコード作成と空文字チェック
         binding.btCreate.setOnClickListener {
             viewModel.setBundle(binding.edUrl.text.toString())
         }
     }
+    fun blackToast(){
+        // Toastを表示
+        activity?.let {
+            Toast.makeText(it, "作成したいurlが入力されていません。", Toast.LENGTH_SHORT).show()
+        }
+    }
     fun displayFragment(){
+        // displayFragmentへ遷移
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
         transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
     }

@@ -9,9 +9,11 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentDisplayBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.display.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.DisplayViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -63,7 +65,15 @@ class DisplayFragment: Fragment() {
         activity?.let {
             viewModel.qrBitmap().observe(it, { bitmap ->
                 if (bitmap != null){
+                    // 生成したQRコードをImageViewにセット
                     binding.ivQR.setImageBitmap(bitmap)
+                    // textViewにUrlをセット
+                    binding.tvUrl.text = arguments?.getString(IntentBundle.ScanUrl.name)
+
+                    // recyclerViewの生成
+                    val displayRecyclerViewAdapter = RecyclerViewAdapter()
+                    binding.rvShare.adapter = displayRecyclerViewAdapter
+                    binding.rvShare.layoutManager = LinearLayoutManager(it)
                 }
             })
         }

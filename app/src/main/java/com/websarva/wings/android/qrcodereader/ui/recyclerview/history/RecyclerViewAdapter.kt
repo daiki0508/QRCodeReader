@@ -25,7 +25,7 @@ class RecyclerViewAdapter(
         holder.icon.setImageResource(
             when(items[position][History.Type.name]){
                 0 -> R.drawable.ic_baseline_language_24
-                else -> R.drawable.ic_baseline_open_in_browser_24
+                else -> Log.e("ERROR", "不正な操作が行われた可能性があります。")
             }
         )
 
