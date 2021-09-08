@@ -2,6 +2,7 @@ package com.websarva.wings.android.qrcodereader.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
@@ -23,19 +24,6 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.state().value == null){
             supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
             supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
-        }
-    }
-
-    override fun onBackPressed() {
-        viewModel.state().value?.let {
-            when (it) {
-                1,3,4 -> {
-                    supportFragmentManager.popBackStack()
-                }
-                else -> {
-
-                }
-            }
         }
     }
 }

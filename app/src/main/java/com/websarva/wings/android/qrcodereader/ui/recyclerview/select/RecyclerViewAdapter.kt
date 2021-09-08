@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateMapFragment
@@ -14,6 +15,8 @@ class RecyclerViewAdapter(
     private val activity: FragmentActivity,
     private val fragment: SelectFragment
     ): RecyclerView.Adapter<RecyclerViewHolder>() {
+    private lateinit var transaction: FragmentTransaction
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.row_select, parent, false)
@@ -22,6 +25,11 @@ class RecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+        // transactionにTransactionを代入
+        transaction = activity.supportFragmentManager.beginTransaction()
+        // カスタムアニメーションの設定
+        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+
         when(position){
             0 -> {
                 holder.title.text = "ウェブページ"
@@ -29,13 +37,7 @@ class RecyclerViewAdapter(
 
                 // タップ時の処理
                 holder.view.setOnClickListener {
-                    activity.let {
-                        val fragmentManager = it.supportFragmentManager
-                        val transaction = fragmentManager.beginTransaction()
-                        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-                        transaction.addToBackStack(null)
-                        transaction.replace(R.id.container, CreateUrlFragment()).commit()
-                    }
+                    transaction.replace(R.id.container, CreateUrlFragment()).commit()
                 }
             }
             1 -> {
@@ -45,21 +47,14 @@ class RecyclerViewAdapter(
                 // タップ時の処理
                 holder.view.setOnClickListener {
                     holder.view.setOnClickListener {
-                        activity.let {
-                            val fragmentManager = it.supportFragmentManager
-                            val transaction = fragmentManager.beginTransaction()
-                            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-                            transaction.addToBackStack(null)
-                            transaction.replace(R.id.container, CreateMapFragment()).commit()
-                        }
+                        transaction.replace(R.id.container, CreateMapFragment()).commit()
                     }
                 }
             }
             else ->{
                 Log.e("ERROR", "不正な操作が行われた可能性があります。")
                 activity.let {
-                    val fragmentManager = it.supportFragmentManager
-                    fragmentManager.beginTransaction().remove(fragment).commit()
+                    transaction.remove(fragment).commit()
                     it.finish()
                 }
             }

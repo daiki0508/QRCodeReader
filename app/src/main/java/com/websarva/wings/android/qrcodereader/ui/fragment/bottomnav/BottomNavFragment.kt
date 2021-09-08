@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentBottomnavBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
@@ -34,12 +35,12 @@ class BottomNavFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            val fragmentManager = it.supportFragmentManager
             binding.bottomNav.setOnItemSelectedListener { item ->
+                val transaction = it.supportFragmentManager.beginTransaction()
+
                 when(item.itemId){
                     R.id.scan -> {
                         if (viewModel.state().value != 0){
-                            val transaction = fragmentManager.beginTransaction()
                             transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
                             transaction.replace(R.id.container, ScanFragment()).commit()
                         }
@@ -48,8 +49,7 @@ class BottomNavFragment: Fragment() {
                     R.id.create -> {
                         viewModel.state().value?.let { state ->
                             if (state != 2){
-                                val transaction = fragmentManager.beginTransaction()
-                                if (state == 0 || state == 1){
+                                if (state == 0){
                                     transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
                                 }else{
                                     transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
@@ -61,7 +61,6 @@ class BottomNavFragment: Fragment() {
                     }
                     R.id.history ->{
                         if (viewModel.state().value != 3){
-                            val transaction = fragmentManager.beginTransaction()
                             transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
                             transaction.replace(R.id.container, HistoryFragment()).commit()
                         }

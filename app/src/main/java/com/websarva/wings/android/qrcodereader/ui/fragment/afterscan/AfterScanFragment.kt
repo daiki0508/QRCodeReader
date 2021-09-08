@@ -5,11 +5,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
@@ -23,6 +28,36 @@ class AfterScanFragment: Fragment() {
     private val viewModel by sharedViewModel<AfterScanViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
+    private lateinit var transaction: FragmentTransaction
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.let {
+            // transactionにTransactionを代入
+            transaction = it.supportFragmentManager.beginTransaction()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            mainViewModel.state().value?.let {
+                if (it == 0) {
+                    transaction.setCustomAnimations(
+                        R.anim.nav_up_pop_enter_anim,
+                        R.anim.nav_up_pop_exit_anim
+                    )
+                    transaction.replace(R.id.container, ScanFragment()).commit()
+
+                } else if (it == 3) {
+                    transaction.setCustomAnimations(
+                        R.anim.nav_up_pop_enter_anim,
+                        R.anim.nav_up_pop_exit_anim
+                    )
+                    transaction.replace(R.id.container, HistoryFragment()).commit()
+                }
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,8 +70,6 @@ class AfterScanFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainViewModel.setState(1)
 
         activity?.let {
             // 初期設定
@@ -57,8 +90,7 @@ class AfterScanFragment: Fragment() {
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
             activity?.let {
-                val fragmentManager = it.supportFragmentManager
-                fragmentManager.beginTransaction().remove(this).commit()
+                transaction.remove(this).commit()
                 it.finish()
             }
         }

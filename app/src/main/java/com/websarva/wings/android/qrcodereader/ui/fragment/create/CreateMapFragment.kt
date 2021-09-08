@@ -44,7 +44,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         // 初期設定
-        mainViewModel.setState(6)
+        //mainViewModel.setState(6)
         activity?.let {
             viewModel.init(it, this)
         }

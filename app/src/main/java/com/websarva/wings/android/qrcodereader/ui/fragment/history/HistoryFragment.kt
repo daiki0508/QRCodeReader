@@ -62,7 +62,6 @@ class HistoryFragment: Fragment() {
             // afterScanFragmentへの遷移
             val fragmentManager = it.supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
-            transaction.addToBackStack(null)
             transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
             transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
         }
