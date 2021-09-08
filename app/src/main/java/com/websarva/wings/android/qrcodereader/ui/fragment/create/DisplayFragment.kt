@@ -71,7 +71,7 @@ class DisplayFragment: Fragment() {
                     binding.tvUrl.text = arguments?.getString(IntentBundle.ScanUrl.name)
 
                     // recyclerViewの生成
-                    val displayRecyclerViewAdapter = RecyclerViewAdapter()
+                    val displayRecyclerViewAdapter = RecyclerViewAdapter(viewModel, it)
                     binding.rvShare.adapter = displayRecyclerViewAdapter
                     binding.rvShare.layoutManager = LinearLayoutManager(it)
                 }
@@ -93,9 +93,17 @@ class DisplayFragment: Fragment() {
         }
     }
 
+    override fun onStop() {
+        // キャッシュの削除
+        viewModel.deleteChaChe()
+
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 
+        // bindingの解放
         _binding = null
     }
 }
