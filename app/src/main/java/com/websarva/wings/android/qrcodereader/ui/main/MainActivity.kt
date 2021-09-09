@@ -1,5 +1,7 @@
 package com.websarva.wings.android.qrcodereader.ui.main
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +21,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater).apply {
             setContentView(this.root)
         }
+
+        // toolBarの設定
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.hide()
 
         // fragmentの起動
         if (viewModel.state().value == null){
