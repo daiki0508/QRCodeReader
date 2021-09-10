@@ -1,9 +1,12 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.Manifest
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,8 +54,26 @@ class ScanViewModel(
             it.decoderFactory = DefaultDecoderFactory(formats)
             it.cameraSettings.isAutoFocusEnabled = true
 
+            // 権限確認
+            checkPermission()
+        }
+    }
+    fun checkPermission(){
+        // 権限を既に取得しているかを確認
+        if (ActivityCompat.checkSelfPermission(
+                _mainFragment.value!!.requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED){
+            Log.i("check", "GetPermission")
+
             // scan開始と結果取得
-            scanResult(it)
+            scanResult(_barcodeView.value!!)
+        }else{
+            Log.i("check", "requestPermission")
+            _mainFragment.value!!.requestPermissions(
+                arrayOf(Manifest.permission.CAMERA),
+                1001
+            )
         }
     }
     private fun scanResult(barcodeView: CompoundBarcodeView){

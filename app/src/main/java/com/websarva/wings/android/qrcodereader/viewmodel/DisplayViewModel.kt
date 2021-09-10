@@ -34,17 +34,32 @@ class DisplayViewModel(
     fun init(fragment: DisplayFragment){
         _fragment.value = fragment
     }
-    fun validationCheck(url: String){
+    fun validationCheck(url: String, type: Int){
         val uri = Uri.parse(url)
 
         // 空文字チェック
         if (url.isNotBlank()){
             // ヴァリデーションチェック
-            if (uri.scheme == "http" || uri.scheme == "https"){
-                // QRコード作成
-                createQR(url)
-            }else{
-                _fragment.value!!.exitError()
+            when(type){
+                0 -> {
+                    if (uri.scheme == "http" || uri.scheme == "https"){
+                        // QRコード作成
+                        createQR(url)
+                    }else{
+                        _fragment.value!!.exitError()
+                    }
+                }
+                1 -> {
+                    if (uri.scheme == "geo"){
+                        // QRコード作成
+                        createQR(url)
+                    }else{
+                        _fragment.value!!.exitError()
+                    }
+                }
+                else -> {
+                    _fragment.value!!.exitError()
+                }
             }
         }else{
             _fragment.value!!.blackToast()

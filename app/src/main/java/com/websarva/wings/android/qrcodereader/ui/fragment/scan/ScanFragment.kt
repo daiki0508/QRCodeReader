@@ -1,9 +1,13 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentMainBinding
@@ -26,6 +30,11 @@ class ScanFragment: Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
+        // toolBarに関する設定
+        (activity as AppCompatActivity).supportActionBar?.let {
+            it.hide()
+        }
+
         return binding.root
     }
 
@@ -37,6 +46,25 @@ class ScanFragment: Fragment() {
 
         activity?.let {
             viewModel.init(it, binding.barcodeView, this)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.i("result", "Permission Result")
+
+        if (requestCode == 1001){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                // 権限確認後、scanResultの開始
+                viewModel.checkPermission()
+            }else{
+                Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
+            }
         }
     }
 

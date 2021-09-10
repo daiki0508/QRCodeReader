@@ -86,7 +86,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("result", "Permission Result")
+        Log.i("result", "Permission Result")
 
         if (requestCode == 1000){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -151,7 +151,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
     fun displayFragment(){
         // displayFragmentへ遷移
         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-        transaction.replace(R.id.container, viewModel.displayFragment().value!!)
+        transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

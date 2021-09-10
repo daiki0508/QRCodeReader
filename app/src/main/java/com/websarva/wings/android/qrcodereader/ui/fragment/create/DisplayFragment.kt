@@ -59,7 +59,10 @@ class DisplayFragment: Fragment() {
         viewModel.init(this)
 
         // ヴァリデーションチェック
-        viewModel.validationCheck(arguments?.getString(IntentBundle.ScanUrl.name)!!)
+        viewModel.validationCheck(
+            arguments?.getString(IntentBundle.ScanUrl.name)!!,
+            arguments?.getInt(IntentBundle.ScanType.name)!!
+        )
 
         // qrObserver
         activity?.let {

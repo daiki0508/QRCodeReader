@@ -54,12 +54,12 @@ class CreateMapViewModel(
                 _fragment.value!!.requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED){
-            Log.d("check", "GetPermission")
+            Log.i("check", "GetPermission")
 
             // 現在地を取得ボタンの有効化
             _fragment.value!!.enabledMyLocation()
         }else{
-            Log.d("check", "requestPermission")
+            Log.i("check", "requestPermission")
             _fragment.value!!.requestPermissions(
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1000
@@ -93,9 +93,6 @@ class CreateMapViewModel(
 
     fun getSavaLatLng(): SaveLatLng{
         return preferenceMapRepository.read(_activity.value!!)
-    }
-    fun likelyPlaceLatLngs(): MutableLiveData<LatLng>{
-        return _likelyPlaceLatLngs
     }
     fun displayFragment(): MutableLiveData<DisplayFragment>{
         return _displayFragment
