@@ -97,10 +97,12 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         mMap = googleMap
 
         // デフォルトの設定
-        val location = LatLng(35.68, 139.76)
-        mMap.addMarker(MarkerOptions().position(location).title("Default Location"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14F))
-        viewModel.setLatLng(35.68, 139.76)
+        viewModel.getSavaLatLng().let {
+            val location = LatLng(it.latitude, it.longitude)
+            mMap.addMarker(MarkerOptions().position(location).title("Default Location"))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14F))
+            viewModel.setLatLng(it.latitude, it.longitude)
+        }
 
         // ZoomIn ZoomOutの許可
         mMap.uiSettings.isZoomControlsEnabled = true

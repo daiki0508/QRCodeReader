@@ -13,15 +13,14 @@ import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
-import com.websarva.wings.android.qrcodereader.repository.PreferenceRepository
-import com.websarva.wings.android.qrcodereader.repository.PreferenceRepositoryClient
+import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import kotlinx.coroutines.launch
 import java.util.*
 
 class ScanViewModel(
-    private val preferenceRepository: PreferenceRepositoryClient
+    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient
 ): ViewModel() {
     private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
         MutableLiveData<AfterScanFragment>()
@@ -63,7 +62,11 @@ class ScanViewModel(
             viewModelScope.launch {
                 // 履歴を作成、保存
                 val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
-                preferenceRepository.write(_activity.value!!, keyName = it.text, SaveData(title = it.text, type = 0, time = date.toString()))
+                preferenceHistoryRepository.write(
+                    _activity.value!!,
+                    keyName = it.text,
+                    SaveData(title = it.text, type = 0, time = date.toString())
+                )
 
                 // bundleへのデータセットと値の受け渡し準備
                 val bundle = Bundle()

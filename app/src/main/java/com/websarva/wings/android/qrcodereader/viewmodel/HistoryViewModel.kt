@@ -9,14 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.websarva.wings.android.qrcodereader.model.History
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
-import com.websarva.wings.android.qrcodereader.repository.PreferenceRepositoryClient
+import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import kotlinx.coroutines.launch
 import java.util.*
 
 class HistoryViewModel(
-    private val preferenceRepository: PreferenceRepositoryClient
+    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient
 ): ViewModel() {
     private val _activity = MutableLiveData<FragmentActivity>().apply {
         MutableLiveData<FragmentActivity>()
@@ -41,10 +41,10 @@ class HistoryViewModel(
             val historyList: MutableList<MutableMap<String, Any>> = mutableListOf()
             var history: MutableMap<String, Any>
             // keyListを取得し、分割
-            if (preferenceRepository.keyList(_activity.value!!).list.isNotBlank()){
-                for (list in preferenceRepository.keyList(_activity.value!!).list.split("\n")){
+            if (preferenceHistoryRepository.keyList(_activity.value!!).list.isNotBlank()){
+                for (list in preferenceHistoryRepository.keyList(_activity.value!!).list.split("\n")){
                     // 対応したdataを取得
-                    val data = preferenceRepository.read(_activity.value!!, keyName = list)
+                    val data = preferenceHistoryRepository.read(_activity.value!!, keyName = list)
                     // mutableMapに代入
                     history = mutableMapOf(
                         History.Title.name to data.title,

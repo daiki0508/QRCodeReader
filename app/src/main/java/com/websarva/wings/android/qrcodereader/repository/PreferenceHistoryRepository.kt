@@ -8,13 +8,13 @@ import androidx.security.crypto.MasterKey
 import com.websarva.wings.android.qrcodereader.model.History
 import com.websarva.wings.android.qrcodereader.model.SaveData
 
-interface PreferenceRepository {
+interface PreferenceHistoryRepository {
     suspend fun write(activity: FragmentActivity, keyName: String, data: SaveData)
     suspend fun read(activity: FragmentActivity, keyName: String): SaveData
     suspend fun keyList(activity: FragmentActivity):SaveData
 }
 
-class PreferenceRepositoryClient: PreferenceRepository{
+class PreferenceHistoryRepositoryClient: PreferenceHistoryRepository{
     override suspend fun write(activity: FragmentActivity, keyName: String, data: SaveData) {
         with(createPreference(activity).edit()){
             putString("${keyName}_${History.Title}", data.title)
