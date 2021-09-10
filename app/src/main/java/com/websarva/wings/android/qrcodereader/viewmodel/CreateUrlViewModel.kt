@@ -25,6 +25,7 @@ class CreateUrlViewModel: ViewModel() {
             // bundleに値をセット
             val bundle = Bundle()
             bundle.putString(IntentBundle.ScanUrl.name, url)
+            bundle.putInt(IntentBundle.ScanType.name, 0)
             _displayFragment.value!!.arguments = bundle
 
             // viewへ処理を渡す

@@ -4,5 +4,6 @@ import androidx.annotation.Keep
 
 @Keep
 enum class IntentBundle {
-    ScanUrl
+    ScanUrl,
+    ScanType
 }

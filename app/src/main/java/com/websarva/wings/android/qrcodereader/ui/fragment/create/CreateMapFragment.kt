@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,10 +31,23 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
     get() = _binding!!
 
     private val viewModel: CreateMapViewModel by viewModel()
-    private val mainViewModel by sharedViewModel<MainViewModel>()
 
+    private lateinit var transaction: FragmentTransaction
     private lateinit var mMap: GoogleMap
     private lateinit var menu: Menu
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.let {
+            transaction = it.supportFragmentManager.beginTransaction()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this){
+            transaction.setCustomAnimations(R.anim.nav_up_pop_enter_anim, R.anim.nav_up_pop_exit_anim)
+            transaction.replace(R.id.container, SelectFragment()).commit()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +72,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
 
         // 初期設定
         activity?.let {
-            viewModel.init(it, this)
+            viewModel.init(it, this, DisplayFragment())
         }
 
         // 地図起動
@@ -83,15 +98,6 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -142,6 +148,11 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         // actionBarのlocationButtonを非表示に
         menu.getItem(0).isVisible = false
     }
+    fun displayFragment(){
+        // displayFragmentへ遷移
+        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+        transaction.replace(R.id.container, viewModel.displayFragment().value!!)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -159,7 +170,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
                 viewModel.checkPermission()
             }
             R.id.decision -> {
-                //TODO("未実装")
+                viewModel.setBundle()
             }
             else -> retValue = super.onOptionsItemSelected(item)
         }
