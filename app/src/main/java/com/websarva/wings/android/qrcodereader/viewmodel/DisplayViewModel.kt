@@ -41,6 +41,7 @@ class DisplayViewModel(
         if (url.isNotBlank()){
             // ヴァリデーションチェック
             when(type){
+                // 0がwebページ, 1が地図
                 0 -> {
                     if (uri.scheme == "http" || uri.scheme == "https"){
                         // QRコード作成

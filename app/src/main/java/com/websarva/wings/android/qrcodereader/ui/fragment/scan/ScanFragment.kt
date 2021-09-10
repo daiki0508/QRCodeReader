@@ -31,9 +31,7 @@ class ScanFragment: Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
         // toolBarに関する設定
-        (activity as AppCompatActivity).supportActionBar?.let {
-            it.hide()
-        }
+        (activity as AppCompatActivity).supportActionBar?.hide()
 
         return binding.root
     }

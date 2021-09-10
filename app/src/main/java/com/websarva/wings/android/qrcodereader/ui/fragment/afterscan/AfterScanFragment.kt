@@ -74,25 +74,29 @@ class AfterScanFragment: Fragment() {
         activity?.let {
             // 初期設定
             viewModel.init(it, arguments?.getString(IntentBundle.ScanUrl.name)!!, this)
-
-            // recyclerview
-            val actionRecyclerViewAdapter = RecyclerViewAdapter(it, viewModel.scanUri().value!!)
-            binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
-            binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
-            binding.selectRecyclerView.layoutManager = LinearLayoutManager(it)
         }
     }
 
-    fun afterValidationCheck(valFlag: Boolean){
+    fun afterValidationCheck(valFlag: Boolean, type: Int?){
         // OKはtrue
         if (valFlag){
             binding.scanUrl.text = viewModel.scanUri().value.toString()
+            createRecyclerView(type!!)
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
             activity?.let {
                 transaction.remove(this).commit()
                 it.finish()
             }
+        }
+    }
+    private fun createRecyclerView(type: Int){
+        // recyclerview
+        activity?.let {
+            val actionRecyclerViewAdapter = RecyclerViewAdapter(it, viewModel.scanUri().value!!, type)
+            binding.selectRecyclerView.adapter = actionRecyclerViewAdapter
+            binding.selectRecyclerView.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
+            binding.selectRecyclerView.layoutManager = LinearLayoutManager(it)
         }
     }
 
