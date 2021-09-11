@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.App
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
+import com.websarva.wings.android.qrcodereader.viewmodel.CreateAppsViewModel
 
 class RecyclerViewAdapter(
-    private val items: MutableList<MutableMap<String, Any>>
+    private val items: MutableList<MutableMap<String, Any>>,
+    private val viewModel: CreateAppsViewModel
     ): RecyclerView.Adapter<RecyclerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,7 +25,7 @@ class RecyclerViewAdapter(
         holder.icon.setImageDrawable(items[position][App.Icon.name] as Drawable)
 
         holder.view.setOnClickListener {
-            // TODO("未実装")
+            viewModel.setBundle(items[position][App.PName.name] as String)
         }
     }
 

@@ -41,7 +41,7 @@ class DisplayViewModel(
         if (url.isNotBlank()){
             // ヴァリデーションチェック
             when(type){
-                // 0がwebページ, 1が地図
+                // 0がwebページ, 1が地図, 2がアプリ
                 0 -> {
                     if (uri.scheme == "http" || uri.scheme == "https"){
                         // QRコード作成
@@ -52,6 +52,14 @@ class DisplayViewModel(
                 }
                 1 -> {
                     if (uri.scheme == "geo"){
+                        // QRコード作成
+                        createQR(url)
+                    }else{
+                        _fragment.value!!.exitError()
+                    }
+                }
+                2 -> {
+                    if (uri.scheme == "https" && uri.host == "play.google.com"){
                         // QRコード作成
                         createQR(url)
                     }else{
