@@ -12,6 +12,7 @@ import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
+import com.websarva.wings.android.qrcodereader.ui.recyclerview.history.RecyclerViewAdapter
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -70,6 +71,9 @@ class HistoryViewModel(
 
         // viewへ処理を渡す
         _fragment.value!!.afterScanFragment()
+    }
+    fun delete(adapter: RecyclerViewAdapter){
+        preferenceHistoryRepository.delete(_activity.value!!, adapter.getTitle())
     }
 
     fun afterScanFragment(): MutableLiveData<AfterScanFragment>{

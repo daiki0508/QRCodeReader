@@ -3,6 +3,7 @@ package com.websarva.wings.android.qrcodereader.viewmodel
 import android.Manifest
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -83,10 +84,21 @@ class ScanViewModel(
             viewModelScope.launch {
                 // 履歴を作成、保存
                 val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
+                val uri = Uri.parse(it.text)
                 preferenceHistoryRepository.write(
                     _activity.value!!,
                     keyName = it.text,
-                    SaveData(title = it.text, type = 0, time = date.toString())
+                    SaveData(
+                        title = it.text,
+                        type = if (uri.scheme == "http" || uri.scheme == "https"){
+                            0
+                        }else if (uri.scheme == "geo") {
+                            1
+                        } else {
+                            2
+                        },
+                        time = date.toString()
+                    )
                 )
 
                 // bundleへのデータセットと値の受け渡し準備

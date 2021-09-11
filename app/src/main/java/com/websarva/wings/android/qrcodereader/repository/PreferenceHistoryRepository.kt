@@ -12,6 +12,7 @@ interface PreferenceHistoryRepository {
     suspend fun write(activity: FragmentActivity, keyName: String, data: SaveData)
     suspend fun read(activity: FragmentActivity, keyName: String): SaveData
     suspend fun keyList(activity: FragmentActivity):SaveData
+    fun delete(activity: FragmentActivity, keyName: String)
 }
 
 class PreferenceHistoryRepositoryClient: PreferenceHistoryRepository{
@@ -44,6 +45,27 @@ class PreferenceHistoryRepositoryClient: PreferenceHistoryRepository{
 
     override suspend fun keyList(activity: FragmentActivity): SaveData {
         return SaveData(list = createPreference(activity).getString(History.List.name, "")!!)
+    }
+
+    override fun delete(activity: FragmentActivity, keyName: String) {
+        // keyListから該当履歴名を削除
+        createPreference(activity).let {
+            val beforeKeyList = it.getString(History.List.name, "")
+            var afterKeyList = beforeKeyList?.replaceFirst("$keyName\n", "")
+            if (beforeKeyList == afterKeyList){
+                afterKeyList = beforeKeyList?.replaceFirst(keyName, "")
+            }
+
+            // 値の更新処理
+            with(it.edit()){
+                putString(History.List.name, afterKeyList)
+                this.remove("${keyName}_${History.Title}")
+                this.remove("${keyName}_${History.Type}")
+                this.remove("${keyName}_${History.Time}")
+                apply()
+            }
+            Log.i("preference_delete", "Success")
+        }
     }
 
     private fun createPreference(activity: FragmentActivity): SharedPreferences {

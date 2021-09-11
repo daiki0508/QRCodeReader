@@ -1,9 +1,8 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.history
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,13 +14,15 @@ import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment: Fragment() {
+class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
     private var _binding: FragmentHistoryBinding? = null
     private val binding
     get() = _binding!!
 
     private val viewModel: HistoryViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
+
+    private lateinit var adapter: RecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,17 +45,22 @@ class HistoryFragment: Fragment() {
 
         // 履歴データの取得
         viewModel.getHistoryData()
+
+        // contextMenuの登録
+        registerForContextMenu(binding.rvHistory)
     }
 
     fun recyclerView(items: MutableList<MutableMap<String, Any>>){
-        // NoContentsを非表示
-        binding.tvNoContents.visibility = View.GONE
-
         activity?.let {
-            val historyRecyclerViewAdapter = RecyclerViewAdapter(items, viewModel)
-            binding.rvHistory.adapter = historyRecyclerViewAdapter
+            adapter = RecyclerViewAdapter(items, viewModel)
+            binding.rvHistory.adapter = adapter
             binding.rvHistory.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
             binding.rvHistory.layoutManager = LinearLayoutManager(it)
+
+            if (adapter.itemCount != 0){
+                // NoContentsを非表示
+                binding.tvNoContents.visibility = View.GONE
+            }
         }
     }
     fun afterScanFragment(){
@@ -65,6 +71,40 @@ class HistoryFragment: Fragment() {
             transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
             transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
         }
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        menu.add(Menu.NONE, 1, Menu.NONE, R.string.history_context)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        Log.d("context", "Called!")
+        var retValue = true
+
+        when(item.itemId){
+            1 -> {
+                // タップ時のpositionを取得
+                val position = adapter.getPosition()
+                // positionから該当履歴を削除
+                adapter.items.removeAt(position)
+                if (adapter.itemCount == 0){
+                    binding.rvHistory.visibility = View.GONE
+                    binding.tvNoContents.visibility = View.VISIBLE
+                }
+                // 削除をRecyclerViewに通知
+                adapter.notifyItemRemoved(position)
+
+                // preferenceからも削除
+                viewModel.delete(adapter)
+            }
+            else -> retValue = super.onContextItemSelected(item)
+        }
+
+        return retValue
     }
 
     override fun onDestroyView() {

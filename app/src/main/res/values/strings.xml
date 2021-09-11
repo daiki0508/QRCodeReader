@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">QRCodeReader</string>
+    <string name="history_context">削除する</string>
 </resources>
