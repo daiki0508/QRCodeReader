@@ -1,34 +1,33 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
-import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
-import com.websarva.wings.android.qrcodereader.databinding.FragmentMainBinding
+import com.websarva.wings.android.qrcodereader.databinding.FragmentScanBinding
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ScanFragment: Fragment() {
-    private var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentScanBinding? = null
     private val binding
     get() = _binding!!
 
-    private val viewModel by sharedViewModel<ScanViewModel>()
     private val mainViewModel by sharedViewModel<MainViewModel>()
+
+    private lateinit var transaction: FragmentTransaction
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentScanBinding.inflate(inflater, container, false)
 
         // toolBarに関する設定
         (activity as AppCompatActivity).supportActionBar?.hide()
@@ -43,54 +42,18 @@ class ScanFragment: Fragment() {
         mainViewModel.setState(0)
 
         activity?.let {
-            viewModel.init(it, binding.barcodeView, this)
+            transaction = it.supportFragmentManager.beginTransaction()
         }
-    }
 
-    @SuppressLint("MissingPermission")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("result", "Permission Result")
-
-        if (requestCode == 1001){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                // 権限確認後、scanResultの開始
-                viewModel.checkPermission()
-            }else{
-                Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
-            }
-        }
-    }
-
-    fun afterScanFragment(){
-        activity?.let {
-            // afterScanFragmentへの遷移
-            val fragmentManager = it.supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
+        // カメラでスキャンボタンをタップ時の処理
+        binding.btCamera.setOnClickListener {
             transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-            transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
+            transaction.replace(R.id.container, CameraFragment()).commit()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        viewModel.barcodeView().value!!.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        viewModel.barcodeView().value!!.pause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
+        // 画像からスキャンボタンをタップ時の処理
+        binding.btPhoto.setOnClickListener {
+            TODO("未実装")
+        }
     }
 }
