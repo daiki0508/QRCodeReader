@@ -3,6 +3,7 @@ package com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentPhotoBinding
+import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.PhotoViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -65,8 +67,21 @@ class PhotoFragment: Fragment() {
                 if (!url.isNullOrBlank()){
                     setQRCode(viewModel.qrcode().value!!, url)
                 }else{
-                    // フォトライブラリを開く
-                    viewModel.createGetDeviceImageIntent()
+                    arguments?.getInt(IntentBundle.ScanType.name, 0)?.let { type ->
+                        when (type) {
+                            0 -> {
+                                // フォトライブラリを開く
+                                viewModel.createGetDeviceImageIntent()
+                            }
+                            1 -> {
+                                Log.d("url", arguments?.getString(IntentBundle.ScanUrl.name, "")!!)
+                                viewModel.readQRCodeFromImage(Uri.parse(arguments?.getString(IntentBundle.ScanUrl.name, "")))
+                            }
+                            else -> {
+
+                            }
+                        }
+                    }
                 }
             })
         }
@@ -78,6 +93,7 @@ class PhotoFragment: Fragment() {
         if (requestCode == 1){
             when(resultCode){
                 Activity.RESULT_OK -> {
+                    Log.d("url", data?.data.toString())
                     viewModel.readQRCodeFromImage(data?.data!!)
                 }
                 else -> {

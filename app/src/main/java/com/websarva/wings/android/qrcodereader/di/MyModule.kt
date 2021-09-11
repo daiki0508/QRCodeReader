@@ -10,6 +10,7 @@ import org.koin.dsl.module
 class MyModule {
     val module = module {
         viewModel { MainViewModel() }
+        viewModel { ScanViewModel() }
         viewModel { CameraViewModel(get()) }
         viewModel { PhotoViewModel() }
         viewModel { AfterScanViewModel() }
