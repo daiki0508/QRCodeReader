@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.fragment.create
+package com.websarva.wings.android.qrcodereader.ui.fragment.create.map
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -14,15 +13,13 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateMapBinding
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.CreateMapViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateMapFragment : Fragment(), OnMapReadyCallback {

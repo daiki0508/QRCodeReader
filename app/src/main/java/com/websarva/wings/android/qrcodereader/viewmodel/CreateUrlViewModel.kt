@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 
 class CreateUrlViewModel: ViewModel() {

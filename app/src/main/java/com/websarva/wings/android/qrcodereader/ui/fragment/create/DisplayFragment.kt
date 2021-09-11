@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentDisplayBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.display.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.DisplayViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DisplayFragment: Fragment() {

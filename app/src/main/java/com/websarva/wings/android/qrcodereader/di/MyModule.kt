@@ -16,6 +16,7 @@ class MyModule {
         viewModel { CreateUrlViewModel() }
         viewModel { HistoryViewModel(get()) }
         viewModel { CreateMapViewModel(get()) }
+        viewModel { CreateAppsViewModel() }
         viewModel { DisplayViewModel(get()) }
     }
     val repository = module {

@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.fragment.create
+package com.websarva.wings.android.qrcodereader.ui.fragment.create.web
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateurlBinding
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.CreateUrlViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateUrlFragment: Fragment() {

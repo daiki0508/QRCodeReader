@@ -1,31 +1,21 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.PlacesClient
-import com.websarva.wings.android.qrcodereader.BuildConfig
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveLatLng
-import com.websarva.wings.android.qrcodereader.repository.PreferenceMapRepository
 import com.websarva.wings.android.qrcodereader.repository.PreferenceMapRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateMapFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
-import com.websarva.wings.android.qrcodereader.ui.main.MainActivity
 
 class CreateMapViewModel(
     private val preferenceMapRepository: PreferenceMapRepositoryClient

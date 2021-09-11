@@ -7,9 +7,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateMapFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
 
 class RecyclerViewAdapter(
@@ -52,6 +53,17 @@ class RecyclerViewAdapter(
                     }
                 }
             }
+            2 -> {
+                holder.title.text = "アプリ"
+                holder.icon.setImageResource(R.drawable.ic_baseline_apps_24_white)
+
+                // タップ時の処理
+                holder.view.setOnClickListener {
+                    holder.view.setOnClickListener {
+                        transaction.replace(R.id.container, CreateAppsFragment()).commit()
+                    }
+                }
+            }
             else ->{
                 Log.e("ERROR", "不正な操作が行われた可能性があります。")
                 activity.let {
@@ -63,6 +75,6 @@ class RecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return 3
     }
 }

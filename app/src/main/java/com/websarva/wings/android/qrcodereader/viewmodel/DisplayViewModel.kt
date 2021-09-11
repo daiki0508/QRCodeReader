@@ -12,7 +12,7 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.websarva.wings.android.qrcodereader.model.CacheName
 import com.websarva.wings.android.qrcodereader.repository.SaveBitmapClientRepository
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.CreateUrlFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 import kotlinx.coroutines.launch
 import java.io.File
