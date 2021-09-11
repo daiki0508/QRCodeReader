@@ -114,7 +114,9 @@ class RecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return 3
+    override fun getItemCount(): Int = when(type){
+        0 -> 3
+        1 -> 1
+        else -> 3
     }
 }

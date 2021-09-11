@@ -79,12 +79,11 @@ class CameraFragment: Fragment() {
         }
     }
 
-    fun afterScanFragment(){
-        activity?.let {
-            // afterScanFragmentへの遷移
-            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-            transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
-        }
+    fun afterScanFragment() {
+        // afterScanFragmentへの遷移
+        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+        transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
+
     }
 
     override fun onResume() {

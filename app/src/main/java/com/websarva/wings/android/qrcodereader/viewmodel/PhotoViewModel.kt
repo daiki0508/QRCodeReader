@@ -4,17 +4,23 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
+import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class PhotoViewModel: ViewModel() {
     private val _fragment = MutableLiveData<PhotoFragment>().apply {
         MutableLiveData<PhotoFragment>()
+    }
+    private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
+        MutableLiveData<AfterScanFragment>()
     }
     private val _qrcode = MutableLiveData<Bitmap>().apply {
         MutableLiveData<Bitmap>()
@@ -42,9 +48,6 @@ class PhotoViewModel: ViewModel() {
         _qrcode.value = this
         val url = MultiFormatReader().decode(binaryBitmap).text
         _url.value = url
-
-        // viewへ処理を渡す
-        //_fragment.value!!.setQRCode(this)
     }
     private fun getBitmapFromUri(uri: Uri?) = when{
         uri != null -> _fragment.value!!.context?.contentResolver
@@ -52,12 +55,26 @@ class PhotoViewModel: ViewModel() {
             ?.use { BitmapFactory.decodeFileDescriptor(it.fileDescriptor) }
         else -> null
     }
+    fun setBundle(){
+        _afterScanFragment.value = AfterScanFragment()
+
+        // bundleに値をセット
+        val bundle = Bundle()
+        bundle.putString(IntentBundle.ScanUrl.name, _url.value)
+        _afterScanFragment.value!!.arguments = bundle
+
+        // viewへ処理を渡す
+        _fragment.value!!.afterScanFragment()
+    }
 
     fun qrcode(): MutableLiveData<Bitmap>{
         return _qrcode
     }
     fun url(): MutableLiveData<String>{
         return _url
+    }
+    fun afterScanFragment(): MutableLiveData<AfterScanFragment>{
+        return _afterScanFragment
     }
 
     init {

@@ -5,10 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
@@ -53,6 +52,10 @@ class PhotoFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // toolBarに関する設定
+        (activity as AppCompatActivity).supportActionBar?.hide()
+        setHasOptionsMenu(true)
+
         // 初期設定
         viewModel.init(this)
 
@@ -75,7 +78,6 @@ class PhotoFragment: Fragment() {
         if (requestCode == 1){
             when(resultCode){
                 Activity.RESULT_OK -> {
-                    //Log.d("image_url", viewModel.readQRCodeFromImage(data?.data!!))
                     viewModel.readQRCodeFromImage(data?.data!!)
                 }
                 else -> {
@@ -85,8 +87,41 @@ class PhotoFragment: Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.options_menu_map, menu)
+
+        // actionBarのlocationButtonを非表示に
+        menu.getItem(0).isVisible = false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var retValue = true
+
+        when(item.itemId){
+            android.R.id.home -> transaction.replace(R.id.container, PhotoFragment()).commit()
+            R.id.decision -> viewModel.setBundle()
+            else -> retValue = super.onOptionsItemSelected(item)
+        }
+
+        return retValue
+    }
+
     private fun setQRCode(qrcode: Bitmap, url: String){
         binding.ivQR.setImageBitmap(qrcode)
         binding.tvUrl.text = url
+
+        // toolBarに関する設定
+        (activity as AppCompatActivity).supportActionBar?.let {
+            it.title = "画像からスキャン"
+            it.setDisplayHomeAsUpEnabled(true)
+            it.show()
+        }
+    }
+    fun afterScanFragment(){
+        // afterScanFragmentへの遷移
+        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+        transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
     }
 }

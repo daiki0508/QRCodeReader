@@ -34,7 +34,10 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         // toolBarに関する設定
-        (activity as AppCompatActivity).supportActionBar?.hide()
+        (activity as AppCompatActivity).supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(false)
+            it.hide()
+        }
 
         return binding.root
     }
