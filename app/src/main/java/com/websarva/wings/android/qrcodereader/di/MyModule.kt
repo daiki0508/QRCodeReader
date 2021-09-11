@@ -11,6 +11,7 @@ class MyModule {
     val module = module {
         viewModel { MainViewModel() }
         viewModel { CameraViewModel(get()) }
+        viewModel { PhotoViewModel() }
         viewModel { AfterScanViewModel() }
         viewModel { CreateUrlViewModel() }
         viewModel { HistoryViewModel(get()) }

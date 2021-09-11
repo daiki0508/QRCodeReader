@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentScanBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -53,7 +54,8 @@ class ScanFragment: Fragment() {
 
         // 画像からスキャンボタンをタップ時の処理
         binding.btPhoto.setOnClickListener {
-            TODO("未実装")
+            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+            transaction.replace(R.id.container, PhotoFragment()).commit()
         }
     }
 }
