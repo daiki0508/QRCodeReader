@@ -3,6 +3,7 @@ package com.websarva.wings.android.qrcodereader.ui.fragment.history
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -31,6 +32,9 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+
+        // toolBarに関する設定
+        (activity as AppCompatActivity).supportActionBar?.hide()
 
         return binding.root
     }

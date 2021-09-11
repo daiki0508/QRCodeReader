@@ -14,7 +14,7 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
@@ -45,7 +45,7 @@ class AfterScanFragment: Fragment() {
                         R.anim.nav_up_pop_enter_anim,
                         R.anim.nav_up_pop_exit_anim
                     )
-                    transaction.replace(R.id.container, ScanFragment()).commit()
+                    transaction.replace(R.id.container, CameraFragment()).commit()
 
                 } else if (it == 3) {
                     transaction.setCustomAnimations(

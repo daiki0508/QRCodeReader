@@ -1,7 +1,6 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
 import android.Manifest
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,18 +18,18 @@ import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ScanViewModel(
+class CameraViewModel(
     private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient
 ): ViewModel() {
     private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
         MutableLiveData<AfterScanFragment>()
     }
-    private val _mainFragment = MutableLiveData<ScanFragment>().apply {
-        MutableLiveData<ScanFragment>()
+    private val _mainFragment = MutableLiveData<CameraFragment>().apply {
+        MutableLiveData<CameraFragment>()
     }
     private val _activity = MutableLiveData<FragmentActivity>().apply {
         MutableLiveData<FragmentActivity>()
@@ -39,12 +38,12 @@ class ScanViewModel(
         MutableLiveData<CompoundBarcodeView>()
     }
 
-    fun init(activity: FragmentActivity, barcodeView: CompoundBarcodeView, scanFragment: ScanFragment){
+    fun init(activity: FragmentActivity, barcodeView: CompoundBarcodeView, cameraFragment: CameraFragment){
         // activityやfragmentをグローバル変数に代入
         _activity.value = activity
         _afterScanFragment.value  = AfterScanFragment()
         _barcodeView.value = barcodeView
-        _mainFragment.value = scanFragment
+        _mainFragment.value = cameraFragment
 
         // barcodeViewの設定
         initBarcodeView()
