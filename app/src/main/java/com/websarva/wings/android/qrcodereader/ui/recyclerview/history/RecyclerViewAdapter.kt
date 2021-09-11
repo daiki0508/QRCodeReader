@@ -4,14 +4,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.History
+import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.HistoryViewModel
 
 class RecyclerViewAdapter(
     val items: MutableList<MutableMap<String, Any>>,
-    private val viewModel: HistoryViewModel
+    private val viewModel: HistoryViewModel,
+    private val fragment: HistoryFragment
 ): RecyclerView.Adapter<RecyclerViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -47,10 +50,26 @@ class RecyclerViewAdapter(
         return items.size
     }
 
+    fun getRecyclerViewSimpleCallBack() = object: ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.ACTION_STATE_IDLE,
+        ItemTouchHelper.LEFT
+    ){
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return true
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            setPosition(viewHolder.absoluteAdapterPosition)
+            fragment.contextItemClick()
+        }
+    }
     private fun longClick(holder: RecyclerViewHolder): Boolean{
         Log.d("historyRecyclerView", "Called")
         setPosition(holder.absoluteAdapterPosition)
-        setTitle(holder.title.text.toString())
 
         return false
     }
@@ -61,13 +80,5 @@ class RecyclerViewAdapter(
     }
     private fun setPosition(position: Int){
         this.position = position
-    }
-
-    private var title = ""
-    fun getTitle(): String{
-        return title
-    }
-    private fun setTitle(title: String){
-        this.title = title
     }
 }

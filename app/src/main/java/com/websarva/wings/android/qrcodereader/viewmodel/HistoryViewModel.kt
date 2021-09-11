@@ -72,8 +72,8 @@ class HistoryViewModel(
         // viewへ処理を渡す
         _fragment.value!!.afterScanFragment()
     }
-    fun delete(adapter: RecyclerViewAdapter){
-        preferenceHistoryRepository.delete(_activity.value!!, adapter.getTitle())
+    fun delete(adapter: RecyclerViewAdapter, position: Int){
+        preferenceHistoryRepository.delete(_activity.value!!, adapter.items[position][History.Title.name] as String)
     }
 
     fun afterScanFragment(): MutableLiveData<AfterScanFragment>{

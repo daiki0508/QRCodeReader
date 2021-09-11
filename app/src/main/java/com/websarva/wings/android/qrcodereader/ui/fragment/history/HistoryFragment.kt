@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentHistoryBinding
@@ -52,10 +53,13 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
 
     fun recyclerView(items: MutableList<MutableMap<String, Any>>){
         activity?.let {
-            adapter = RecyclerViewAdapter(items, viewModel)
+            adapter = RecyclerViewAdapter(items, viewModel, this)
             binding.rvHistory.adapter = adapter
             binding.rvHistory.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
             binding.rvHistory.layoutManager = LinearLayoutManager(it)
+
+            val itemTouchHelper = ItemTouchHelper(adapter.getRecyclerViewSimpleCallBack())
+            itemTouchHelper.attachToRecyclerView(binding.rvHistory)
 
             if (adapter.itemCount != 0){
                 // NoContentsを非表示
@@ -72,6 +76,22 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
             transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
         }
     }
+    fun contextItemClick(){
+        // タップ時のpositionを取得
+        val position = adapter.getPosition()
+
+        // preferenceからも削除
+        viewModel.delete(adapter, position)
+
+        // positionから該当履歴を削除
+        adapter.items.removeAt(position)
+        if (adapter.itemCount == 0){
+            binding.rvHistory.visibility = View.GONE
+            binding.tvNoContents.visibility = View.VISIBLE
+        }
+        // 削除をRecyclerViewに通知
+        adapter.notifyItemRemoved(position)
+    }
 
     override fun onCreateContextMenu(
         menu: ContextMenu,
@@ -87,19 +107,7 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
 
         when(item.itemId){
             1 -> {
-                // タップ時のpositionを取得
-                val position = adapter.getPosition()
-                // positionから該当履歴を削除
-                adapter.items.removeAt(position)
-                if (adapter.itemCount == 0){
-                    binding.rvHistory.visibility = View.GONE
-                    binding.tvNoContents.visibility = View.VISIBLE
-                }
-                // 削除をRecyclerViewに通知
-                adapter.notifyItemRemoved(position)
-
-                // preferenceからも削除
-                viewModel.delete(adapter)
+                contextItemClick()
             }
             else -> retValue = super.onContextItemSelected(item)
         }
