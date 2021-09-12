@@ -1,10 +1,13 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.zxing.BinaryBitmap
@@ -36,7 +39,18 @@ class PhotoViewModel: ViewModel() {
         it.addCategory(Intent.CATEGORY_OPENABLE)
         it.type = "image/*"
 
-        _fragment.value!!.startActivityForResult(it, 1)
+        val launcher = _fragment.value!!.registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){ result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                readQRCodeFromImage(result.data?.data!!)
+            }else{
+                Log.w("Warning", "ACTIVITY RESULT FAILURE")
+            }
+        }
+
+        // Activityを起動
+        launcher.launch(it)
     }
     fun readQRCodeFromImage(uri: Uri) = with(getBitmapFromUri(uri)) {
         val pixels = IntArray(this!!.width * this.height)

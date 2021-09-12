@@ -91,22 +91,6 @@ class PhotoFragment: Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1){
-            when(resultCode){
-                Activity.RESULT_OK -> {
-                    Log.d("url", data?.data.toString())
-                    viewModel.readQRCodeFromImage(data?.data!!)
-                }
-                else -> {
-                    Log.w("Warning", "ACTIVITY RESULT FAILURE")
-                }
-            }
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
