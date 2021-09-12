@@ -40,7 +40,6 @@ class CreateAppsFragment: Fragment() {
                 R.anim.nav_up_pop_exit_anim
             )
             transaction.replace(R.id.container, SelectFragment()).commit()
-
         }
     }
 

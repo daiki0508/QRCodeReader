@@ -66,7 +66,10 @@ class PhotoViewModel: ViewModel() {
     private fun getBitmapFromUri(uri: Uri?) = when{
         uri != null -> _fragment.value!!.context?.contentResolver
             ?.openFileDescriptor(uri, "r")
-            ?.use { BitmapFactory.decodeFileDescriptor(it.fileDescriptor) }
+            ?.use {
+                val beforeBitmap = BitmapFactory.decodeFileDescriptor(it.fileDescriptor)
+                Bitmap.createScaledBitmap(beforeBitmap, 625, 625, true)
+            }
         else -> null
     }
     fun setBundle(){

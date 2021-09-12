@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentDisplayBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.display.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.DisplayViewModel
@@ -26,6 +28,7 @@ class DisplayFragment: Fragment() {
     private val viewModel: DisplayViewModel by viewModel()
 
     private lateinit var transaction: FragmentTransaction
+    private var type: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +38,16 @@ class DisplayFragment: Fragment() {
             transaction = it.supportFragmentManager.beginTransaction()
         }
 
+        type = arguments?.getInt(IntentBundle.ScanType.name, 0)!!
+
         requireActivity().onBackPressedDispatcher.addCallback(this){
             transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-            transaction.replace(R.id.container, CreateUrlFragment()).commit()
+            when(type){
+                0 -> transaction.replace(R.id.container, CreateUrlFragment()).commit()
+                1 -> transaction.replace(R.id.container, CreateMapFragment()).commit()
+                2 -> transaction.replace(R.id.container, CreateAppsFragment()).commit()
+                else -> exitError()
+            }
         }
     }
 
@@ -60,7 +70,7 @@ class DisplayFragment: Fragment() {
         // ヴァリデーションチェック
         viewModel.validationCheck(
             arguments?.getString(IntentBundle.ScanUrl.name)!!,
-            arguments?.getInt(IntentBundle.ScanType.name)!!
+            type
         )
 
         // qrObserver
@@ -89,8 +99,7 @@ class DisplayFragment: Fragment() {
     fun exitError() {
         activity?.let {
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
-            val fragmentManager = it.supportFragmentManager
-            fragmentManager.beginTransaction().remove(this).commit()
+            transaction.remove(this).commit()
             it.finish()
         }
     }

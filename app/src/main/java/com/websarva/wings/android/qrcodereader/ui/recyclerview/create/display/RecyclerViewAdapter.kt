@@ -33,7 +33,7 @@ class RecyclerViewAdapter(
         holder.view.setOnClickListener {
             Intent().apply {
                 this.action = Intent.ACTION_SEND
-                this.type = "image/*"
+                this.type = "image/jpeg"
                 this.putExtra(Intent.EXTRA_STREAM, viewModel.getQRCodeUri().value)
 
                 // 共有開始

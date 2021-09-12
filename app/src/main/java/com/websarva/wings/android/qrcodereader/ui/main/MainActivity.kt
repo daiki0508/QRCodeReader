@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.validationCheck(it.toString())
         }
     }
-    fun afterScanFragment(){
+    fun photoFragment(){
         supportFragmentManager.beginTransaction().replace(binding.container.id, viewModel.photoFragment().value!!).commit()
     }
     fun exitError(){

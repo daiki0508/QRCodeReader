@@ -40,7 +40,7 @@ class MainViewModel: ViewModel() {
                 _photoFragment.value!!.arguments = bundle
 
                 // viewへ処理を渡す
-                _activity.value!!.afterScanFragment()
+                _activity.value!!.photoFragment()
             }else{
                 _activity.value!!.exitError()
             }

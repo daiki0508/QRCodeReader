@@ -29,6 +29,7 @@ class PhotoFragment: Fragment() {
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var transaction: FragmentTransaction
+    private var type: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,8 @@ class PhotoFragment: Fragment() {
                     setQRCode(viewModel.qrcode().value!!, url)
                 }else{
                     arguments?.getInt(IntentBundle.ScanType.name, 0)?.let { type ->
+                        this.type = type
+
                         when (type) {
                             0 -> {
                                 // フォトライブラリを開く
@@ -104,7 +107,13 @@ class PhotoFragment: Fragment() {
         var retValue = true
 
         when(item.itemId){
-            android.R.id.home -> transaction.replace(R.id.container, PhotoFragment()).commit()
+            android.R.id.home -> {
+                if (type == 0){
+                    transaction.replace(R.id.container, PhotoFragment()).commit()
+                }else{
+                    transaction.replace(R.id.container, ScanFragment()).commit()
+                }
+            }
             R.id.decision -> viewModel.setBundle()
             else -> retValue = super.onOptionsItemSelected(item)
         }
