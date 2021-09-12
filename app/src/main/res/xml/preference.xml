@@ -31,5 +31,9 @@
         <Preference
             app:key="policy"
             app:title="プライバシーポリシー" />
+        <Preference
+            app:key="version"
+            app:title="アプリのバージョン"
+            app:summary="1.0" />
     </PreferenceCategory>
 </PreferenceScreen>
