@@ -11,6 +11,7 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.settings.SettingsFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -59,9 +60,22 @@ class BottomNavFragment: Fragment() {
                         true
                     }
                     R.id.history ->{
-                        if (viewModel.state().value != 3){
+                        viewModel.state().value?.let { state ->
+                            if (state != 3){
+                                if (state == 4){
+                                    transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                                }else{
+                                    transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                                }
+                                transaction.replace(R.id.container, HistoryFragment()).commit()
+                            }
+                        }
+                        true
+                    }
+                    R.id.settings -> {
+                        if (viewModel.state().value != 4){
                             transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
-                            transaction.replace(R.id.container, HistoryFragment()).commit()
+                            transaction.replace(R.id.container, SettingsFragment()).commit()
                         }
                         true
                     }

@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">QRCodeReader</string>
     <string name="history_context">削除する</string>
+
+    <string-array name="themeEntries">
+        <item>ライト</item>
+        <item>ナイト</item>
+    </string-array>
+    <string-array name="themeValue">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>
