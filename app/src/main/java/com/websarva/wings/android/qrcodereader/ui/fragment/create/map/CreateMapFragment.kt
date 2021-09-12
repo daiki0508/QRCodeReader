@@ -77,25 +77,6 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     @SuppressLint("MissingPermission")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("result", "Permission Result")
-
-        if (requestCode == 1000){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                // 現在地の取得の有効化
-                enabledMyLocation()
-            }else{
-                Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 

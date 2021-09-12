@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
@@ -58,7 +59,7 @@ class CameraViewModel(
             checkPermission()
         }
     }
-    fun checkPermission(){
+    private fun checkPermission(){
         // 権限を既に取得しているかを確認
         if (ActivityCompat.checkSelfPermission(
                 _mainFragment.value!!.requireContext(),
@@ -70,10 +71,23 @@ class CameraViewModel(
             scanResult(_barcodeView.value!!)
         }else{
             Log.i("check", "requestPermission")
-            _mainFragment.value!!.requestPermissions(
-                arrayOf(Manifest.permission.CAMERA),
-                1001
-            )
+
+            val requestPermission = _mainFragment.value!!.registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ){
+                if (it){
+                    // 許可時の処理
+                    Log.i("result", "Permission Result")
+                    checkPermission()
+                }else{
+                    // 拒否時の処理
+                    Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
+                    _mainFragment.value!!.scanFragment()
+                }
+            }
+
+            // request開始
+            requestPermission.launch(Manifest.permission.CAMERA)
         }
     }
     private fun scanResult(barcodeView: CompoundBarcodeView){

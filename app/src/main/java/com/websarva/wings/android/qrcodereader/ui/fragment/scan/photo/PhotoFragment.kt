@@ -15,7 +15,9 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentPhotoBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
+import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.PhotoViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PhotoFragment: Fragment() {
@@ -24,6 +26,7 @@ class PhotoFragment: Fragment() {
     get() = _binding!!
 
     private val viewModel: PhotoViewModel by viewModel()
+    private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var transaction: FragmentTransaction
 
@@ -74,7 +77,8 @@ class PhotoFragment: Fragment() {
                                 viewModel.createGetDeviceImageIntent()
                             }
                             1 -> {
-                                Log.d("url", arguments?.getString(IntentBundle.ScanUrl.name, "")!!)
+                                // 現在のfragmentをmainViewModelに通知
+                                mainViewModel.setState(0)
                                 viewModel.readQRCodeFromImage(Uri.parse(arguments?.getString(IntentBundle.ScanUrl.name, "")))
                             }
                             else -> {

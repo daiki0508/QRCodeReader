@@ -37,8 +37,8 @@ class CameraFragment: Fragment() {
 
         // バックボタンタップ時の処理
         requireActivity().onBackPressedDispatcher.addCallback(this){
-            transaction.setCustomAnimations(R.anim.nav_up_pop_enter_anim, R.anim.nav_up_pop_exit_anim)
-            transaction.replace(R.id.container, ScanFragment()).commit()
+            // scanFragmentへ遷移
+            scanFragment()
         }
     }
 
@@ -60,25 +60,10 @@ class CameraFragment: Fragment() {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("result", "Permission Result")
-
-        if (requestCode == 1001){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                // 権限確認後、scanResultの開始
-                viewModel.checkPermission()
-            }else{
-                Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
-            }
-        }
+    fun scanFragment(){
+        transaction.setCustomAnimations(R.anim.nav_up_pop_enter_anim, R.anim.nav_up_pop_exit_anim)
+        transaction.replace(R.id.container, ScanFragment()).commit()
     }
-
     fun afterScanFragment() {
         // afterScanFragmentへの遷移
         transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)

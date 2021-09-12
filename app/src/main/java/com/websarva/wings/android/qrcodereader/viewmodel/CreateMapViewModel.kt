@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
@@ -32,11 +34,28 @@ class CreateMapViewModel(
     private val _likelyPlaceLatLngs = MutableLiveData<LatLng>().apply {
         MutableLiveData<LatLng>()
     }
+    private val _requestPermission = MutableLiveData<ActivityResultLauncher<String>>().apply {
+        MutableLiveData<ActivityResultLauncher<String>>()
+    }
 
     fun init(activity: FragmentActivity, fragment: CreateMapFragment, displayFragment: DisplayFragment){
         _activity.value = activity
         _fragment.value = fragment
         _displayFragment.value = displayFragment
+
+        // requestPermissionの設定
+        _requestPermission.value = _fragment.value!!.registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ){
+            if (it){
+                // 許可時の処理
+                Log.i("result", "Permission Result")
+                checkPermission()
+            }else{
+                // 拒否時の処理
+                Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
+            }
+        }
     }
     fun checkPermission(){
         // 権限を既に取得しているかを確認
@@ -50,10 +69,9 @@ class CreateMapViewModel(
             _fragment.value!!.enabledMyLocation()
         }else{
             Log.i("check", "requestPermission")
-            _fragment.value!!.requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1000
-            )
+
+            // requestPermissionの開始
+            _requestPermission.value!!.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
     fun initGoogleMap(){
