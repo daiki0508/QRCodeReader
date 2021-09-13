@@ -70,15 +70,17 @@ class ScanFragment: Fragment() {
 
         bottomNavViewModel.bottomNavView().observe(requireActivity(), {
             // trueなら表示
-            if (viewModel.showBalloonFlag() == true) {
+            //if (viewModel.showBalloonFlag() == true) {
                 // balloonの表示順番を設定
-                viewModel.cameraBalloon().value!!
-                    .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
-                    .relayShowAlignTop(bottomNavViewModel.bottomNavBalloon().value!!, it)
+                bottomNavViewModel.let {
+                    it.bottomNavBalloonScan().value!!
+                        .relayShowAlignTop(viewModel.cameraBalloon().value!!, binding.btCamera)
+                        .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
 
-                // balloonを表示
-                binding.btCamera.showAlignTop(viewModel.cameraBalloon().value!!)
-            }
+                    // balloonを表示
+                    it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonScan().value!!)
+                }
+            //}
         })
     }
 

@@ -1,6 +1,8 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
@@ -10,6 +12,7 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class BottomNavViewModel: ViewModel() {
@@ -19,7 +22,10 @@ class BottomNavViewModel: ViewModel() {
     private val _bottomNavView = MutableLiveData<View>().apply {
         MutableLiveData<View>()
     }
-    private val _bottomNavBalloon = MutableLiveData<Balloon>().apply {
+    private val _bottomNavBalloonScan = MutableLiveData<Balloon>().apply {
+        MutableLiveData<Balloon>()
+    }
+    private val _bottomNavBalloonCreate = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
 
@@ -31,21 +37,34 @@ class BottomNavViewModel: ViewModel() {
         setBalloon()
     }
     private fun setBalloon(){
-        _bottomNavBalloon.value = createBalloon("hogehoge")
+        // navigationのScanの説明
+        _bottomNavBalloonScan.value = createBalloon().apply{
+            this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_photo_camera_24)
+            this.getContentView().findViewById<TextView>(R.id.title).text = "コード読み取り"
+            this.getContentView().findViewById<TextView>(R.id.description).text = "主にQRコードのスキャンに関することが行えます"
+        }
+
+        // navigationのCreateの説明
+        _bottomNavBalloonCreate.value = createBalloon().apply {
+            this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_qr_code_24)
+            this.getContentView().findViewById<TextView>(R.id.title).text = "コード生成"
+            this.getContentView().findViewById<TextView>(R.id.description).text = "様々な種類のQRコードを作成できます"
+        }
     }
-    private fun createBalloon(text: String): Balloon{
+    private fun createBalloon(): Balloon{
         return com.skydoves.balloon.createBalloon(_fragment.value!!.requireContext()) {
+            setLayout(R.layout.nav_balloon)
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
-            setHeight(65)
+            setHeight(BalloonSizeSpec.WRAP)
             setArrowPosition(0.7f)
             setCornerRadius(4f)
             setAlpha(0.9f)
-            setText(text)
-            setTextColorResource(R.color.white)
+            //setText(text)
+            //setTextColorResource(R.color.white)
             //setTextIsHtml(true)
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
-            setBackgroundColorResource(R.color.dodgerblue)
+            setBackgroundColorResource(R.color.darkorange)
             //setOnBalloonClickListener(onBalloonClickListener)
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
@@ -60,7 +79,10 @@ class BottomNavViewModel: ViewModel() {
     fun bottomNavView(): MutableLiveData<View>{
         return _bottomNavView
     }
-    fun bottomNavBalloon(): MutableLiveData<Balloon>{
-        return _bottomNavBalloon
+    fun bottomNavBalloonScan(): MutableLiveData<Balloon>{
+        return _bottomNavBalloonScan
+    }
+    fun bottomNavBalloonCreate(): MutableLiveData<Balloon>{
+        return _bottomNavBalloonCreate
     }
 }

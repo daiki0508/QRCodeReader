@@ -14,6 +14,7 @@ import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
@@ -41,10 +42,10 @@ class ScanViewModel(
     }
     private fun setBalloon(){
         // scanFragment内のボタンの説明
-        _cameraBalloon.value = createBalloon("スマホのカメラ機能を用いてQRコードをスキャン出来ます")
-        _photoBalloon.value = createBalloon("端末内に保存されている画像や、ドライブからQRコードをインポートできます")
+        _cameraBalloon.value = createBalloon("スマホのカメラ機能を用いてQRコードをスキャン出来ます", flag = false)
+        _photoBalloon.value = createBalloon("端末内に保存されている画像や、ドライブからQRコードをインポートできます", flag = true)
     }
-    private fun createBalloon(text: String): Balloon{
+    private fun createBalloon(text: String, flag: Boolean): Balloon{
         return createBalloon(_fragment.value!!.requireContext()) {
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
@@ -58,6 +59,14 @@ class ScanViewModel(
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.dodgerblue)
             //setOnBalloonClickListener(onBalloonClickListener)
+            // trueならこのページでのballoonは終了
+            if (flag){
+                setOnBalloonDismissListener {
+                    val transaction = _fragment.value!!.activity?.supportFragmentManager?.beginTransaction()
+                    transaction!!.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                    transaction.replace(R.id.container, SelectFragment()).commit()
+                }
+            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
