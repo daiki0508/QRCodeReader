@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -91,6 +92,7 @@ class AfterScanFragment: Fragment() {
             createRecyclerView(type!!)
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
+            Toast.makeText(activity, "サポートされていないQRコードです", Toast.LENGTH_LONG).show()
             activity?.let {
                 transaction.remove(this).commit()
                 it.finish()

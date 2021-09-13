@@ -1,5 +1,6 @@
 package com.websarva.wings.android.qrcodereader.di
 
+import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.repository.PreferenceMapRepositoryClient
 import com.websarva.wings.android.qrcodereader.repository.SaveBitmapClientRepository
@@ -10,7 +11,7 @@ import org.koin.dsl.module
 class MyModule {
     val module = module {
         viewModel { MainViewModel() }
-        viewModel { ScanViewModel() }
+        viewModel { ScanViewModel(get()) }
         viewModel { CameraViewModel(get()) }
         viewModel { PhotoViewModel() }
         viewModel { AfterScanViewModel() }
@@ -24,5 +25,6 @@ class MyModule {
         factory { PreferenceHistoryRepositoryClient() }
         factory { SaveBitmapClientRepository() }
         factory { PreferenceMapRepositoryClient() }
+        factory { PreferenceBalloonRepositoryClient() }
     }
 }

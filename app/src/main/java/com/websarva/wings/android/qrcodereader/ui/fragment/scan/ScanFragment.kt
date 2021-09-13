@@ -1,12 +1,16 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.skydoves.balloon.*
+import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentScanBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
@@ -63,6 +67,16 @@ class ScanFragment: Fragment() {
         // 画像からスキャンボタンをタップ時の処理
         binding.btPhoto.setOnClickListener {
             viewModel.setBundle()
+        }
+
+        // trueなら表示
+        if (viewModel.showBalloonFlag() == true){
+            // balloonの表示順番を設定
+            viewModel.cameraBalloon().value!!
+                .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
+
+            // balloonを表示
+            binding.btCamera.showAlignTop(viewModel.cameraBalloon().value!!)
         }
     }
 

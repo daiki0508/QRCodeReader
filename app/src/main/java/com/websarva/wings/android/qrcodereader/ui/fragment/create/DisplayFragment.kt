@@ -99,6 +99,7 @@ class DisplayFragment: Fragment() {
     fun exitError() {
         activity?.let {
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
+            Toast.makeText(activity, "サポートされていないQRコードです", Toast.LENGTH_LONG).show()
             transaction.remove(this).commit()
             it.finish()
         }
