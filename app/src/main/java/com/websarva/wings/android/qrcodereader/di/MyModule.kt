@@ -11,6 +11,7 @@ import org.koin.dsl.module
 class MyModule {
     val module = module {
         viewModel { MainViewModel() }
+        viewModel { BottomNavViewModel() }
         viewModel { ScanViewModel(get()) }
         viewModel { CameraViewModel(get()) }
         viewModel { PhotoViewModel() }

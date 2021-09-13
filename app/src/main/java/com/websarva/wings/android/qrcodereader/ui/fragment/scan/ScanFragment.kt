@@ -1,20 +1,18 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import com.skydoves.balloon.*
-import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentScanBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
+import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -26,6 +24,7 @@ class ScanFragment: Fragment() {
     get() = _binding!!
 
     private val viewModel: ScanViewModel by viewModel()
+    private val bottomNavViewModel: BottomNavViewModel by activityViewModels()
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var transaction: FragmentTransaction
@@ -69,15 +68,18 @@ class ScanFragment: Fragment() {
             viewModel.setBundle()
         }
 
-        // trueなら表示
-        if (viewModel.showBalloonFlag() == true){
-            // balloonの表示順番を設定
-            viewModel.cameraBalloon().value!!
-                .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
+        bottomNavViewModel.bottomNavView().observe(requireActivity(), {
+            // trueなら表示
+            if (viewModel.showBalloonFlag() == true) {
+                // balloonの表示順番を設定
+                viewModel.cameraBalloon().value!!
+                    .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
+                    .relayShowAlignTop(bottomNavViewModel.bottomNavBalloon().value!!, it)
 
-            // balloonを表示
-            binding.btCamera.showAlignTop(viewModel.cameraBalloon().value!!)
-        }
+                // balloonを表示
+                binding.btCamera.showAlignTop(viewModel.cameraBalloon().value!!)
+            }
+        })
     }
 
     fun photoFragment(){
