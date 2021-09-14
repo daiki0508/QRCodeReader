@@ -16,6 +16,7 @@ class MyModule {
         viewModel { CameraViewModel(get()) }
         viewModel { PhotoViewModel() }
         viewModel { AfterScanViewModel() }
+        viewModel { SelectViewModel() }
         viewModel { CreateUrlViewModel() }
         viewModel { HistoryViewModel(get()) }
         viewModel { CreateMapViewModel(get()) }

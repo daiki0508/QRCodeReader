@@ -6,16 +6,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
+import com.skydoves.balloon.showAlignBottom
+import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
+import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.SelectViewModel
 
 class RecyclerViewAdapter(
     private val activity: FragmentActivity,
-    private val fragment: SelectFragment
+    private val fragment: SelectFragment,
+    private val viewModel: SelectViewModel,
+    private val bottomNavViewModel: BottomNavViewModel
     ): RecyclerView.Adapter<RecyclerViewHolder>() {
     private lateinit var transaction: FragmentTransaction
 
@@ -41,6 +47,9 @@ class RecyclerViewAdapter(
                 holder.view.setOnClickListener {
                     transaction.replace(R.id.container, CreateUrlFragment()).commit()
                 }
+
+                // holderViewの保存
+                viewModel.setHolderView0(holder.view)
             }
             1 -> {
                 holder.title.text = "地図"
@@ -52,6 +61,9 @@ class RecyclerViewAdapter(
                         transaction.replace(R.id.container, CreateMapFragment()).commit()
                     }
                 }
+
+                // holderViewの保存
+                viewModel.setHolderView1(holder.view)
             }
             2 -> {
                 holder.title.text = "アプリ"
@@ -61,6 +73,19 @@ class RecyclerViewAdapter(
                 holder.view.setOnClickListener {
                     holder.view.setOnClickListener {
                         transaction.replace(R.id.container, CreateAppsFragment()).commit()
+                    }
+                }
+
+                with(viewModel){
+                    // balloonの表示順番設定
+                    bottomNavViewModel.let {
+                        it.bottomNavBalloonCreate().value!!
+                            .relayShowAlignBottom(recyclerViewBalloonWeb().value!!, holderView0().value!!)
+                            .relayShowAlignBottom(recyclerViewBalloonMap().value!!, holderView1().value!!)
+                            .relayShowAlignBottom(recyclerViewBalloonApp().value!!, holder.view)
+
+                        // balloonの表示
+                        it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonCreate().value!!)
                     }
                 }
             }

@@ -10,6 +10,7 @@ import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
+import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
@@ -72,6 +73,7 @@ class BottomNavViewModel: ViewModel() {
             setOverlayPadding(6f)
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
+            setOverlayShape(BalloonOverlayRect)
             setLifecycleOwner(_fragment.value!!.activity)
         }
     }
