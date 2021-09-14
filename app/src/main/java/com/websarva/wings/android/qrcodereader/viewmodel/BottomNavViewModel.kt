@@ -29,6 +29,9 @@ class BottomNavViewModel: ViewModel() {
     private val _bottomNavBalloonCreate = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
+    private val _bottomNavBalloonHistory = MutableLiveData<Balloon>().apply {
+        MutableLiveData<Balloon>()
+    }
 
     fun init(fragment: BottomNavFragment, navView: View){
         _fragment.value = fragment
@@ -50,6 +53,13 @@ class BottomNavViewModel: ViewModel() {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_qr_code_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "コード生成"
             this.getContentView().findViewById<TextView>(R.id.description).text = "様々な種類のQRコードを作成できます"
+        }
+
+        // navigationのHistoryの説明
+        _bottomNavBalloonHistory.value = createBalloon().apply {
+            this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_history_24)
+            this.getContentView().findViewById<TextView>(R.id.title).text = "履歴"
+            this.getContentView().findViewById<TextView>(R.id.description).text = "QRコードのスキャン履歴の一覧が表示されます"
         }
     }
     private fun createBalloon(): Balloon{
@@ -74,7 +84,7 @@ class BottomNavViewModel: ViewModel() {
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
             setOverlayShape(BalloonOverlayRect)
-            setLifecycleOwner(_fragment.value!!.activity)
+            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
         }
     }
 
@@ -82,9 +92,21 @@ class BottomNavViewModel: ViewModel() {
         return _bottomNavView
     }
     fun bottomNavBalloonScan(): MutableLiveData<Balloon>{
+        // bottomNavigationの状態を更新
+        _fragment.value!!.setChecked(0)
+
         return _bottomNavBalloonScan
     }
     fun bottomNavBalloonCreate(): MutableLiveData<Balloon>{
+        // bottomNavigationの状態を更新
+        _fragment.value!!.setChecked(1)
+
         return _bottomNavBalloonCreate
+    }
+    fun bottomNavBalloonHistory(): MutableLiveData<Balloon>{
+        // bottomNavigationの状態を更新
+        _fragment.value!!.setChecked(2)
+
+        return _bottomNavBalloonHistory
     }
 }

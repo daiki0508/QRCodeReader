@@ -74,7 +74,7 @@ class SelectViewModel: ViewModel() {
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
             setOverlayShape(BalloonOverlayRect)
-            setLifecycleOwner(_fragment.value!!.activity)
+            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
         }
     }
 

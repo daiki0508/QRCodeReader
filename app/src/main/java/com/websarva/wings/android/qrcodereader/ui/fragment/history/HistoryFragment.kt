@@ -5,12 +5,16 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.skydoves.balloon.showAlignBottom
+import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentHistoryBinding
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.history.RecyclerViewAdapter
+import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.HistoryViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -23,6 +27,7 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
 
     private val viewModel: HistoryViewModel by viewModel()
     private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val bottomNavViewModel by activityViewModels<BottomNavViewModel>()
 
     private lateinit var adapter: RecyclerViewAdapter
 
@@ -56,6 +61,21 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
 
         // contextMenuの登録
         registerForContextMenu(binding.rvHistory)
+
+        with(viewModel){
+            bottomNavViewModel.let {
+                binding.tvNoContents.let { tv ->
+                    // balloonの表示順番を設定
+                    it.bottomNavBalloonHistory().value!!
+                        .relayShowAlignBottom(historyBalloon().value!!, tv)
+                        .relayShowAlignBottom(historyBalloon2().value!!, tv)
+                        .relayShowAlignBottom(historyBalloon3().value!!, tv)
+
+                    // balloonを表示
+                    it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonHistory().value!!)
+                }
+            }
+        }
     }
 
     fun recyclerView(items: MutableList<MutableMap<String, Any>>){

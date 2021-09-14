@@ -73,7 +73,7 @@ class ScanViewModel(
             setOverlayPadding(6f)
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
-            setLifecycleOwner(_fragment.value!!.activity)
+            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
         }
     }
     fun setBundle(){

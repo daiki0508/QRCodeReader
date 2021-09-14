@@ -91,4 +91,8 @@ class BottomNavFragment: Fragment() {
             }
         }
     }
+
+    fun setChecked(itemId: Int){
+        binding.bottomNav.menu.getItem(itemId).isChecked = true
+    }
 }
