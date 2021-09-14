@@ -1,6 +1,8 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.view.View
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
@@ -9,14 +11,15 @@ import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
+import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 
-class SelectViewModel: ViewModel() {
-    private val _fragment = MutableLiveData<SelectFragment>().apply {
-        MutableLiveData<SelectFragment>()
-    }
+class SelectViewModel(
+    private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
+    application: Application
+): AndroidViewModel(application) {
     private val _recyclerViewBalloonWeb = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
@@ -34,18 +37,16 @@ class SelectViewModel: ViewModel() {
     }
 
     fun init(fragment: SelectFragment){
-        _fragment.value = fragment
-
         // balloonの設定
-        setBalloon()
+        setBalloon(fragment)
     }
-    private fun setBalloon(){
-        _recyclerViewBalloonWeb.value = createBalloon("http,httpsから始まるウェブページのQRコードを作成できます。", flag = false)
-        _recyclerViewBalloonMap.value = createBalloon("現在地などの好きな場所の座標をQRコード化できます", flag = false)
-        _recyclerViewBalloonApp.value = createBalloon("端末内にインストールされているアプリのダウンロードQRコードを作成できます", flag = true)
+    private fun setBalloon(fragment: SelectFragment){
+        _recyclerViewBalloonWeb.value = createBalloon("http,httpsから始まるウェブページのQRコードを作成できます。", fragment)
+        _recyclerViewBalloonMap.value = createBalloon("現在地などの好きな場所の座標をQRコード化できます", fragment)
+        _recyclerViewBalloonApp.value = createBalloon("端末内にインストールされているアプリのダウンロードQRコードを作成できます", fragment)
     }
-    private fun createBalloon(text: String, flag: Boolean): Balloon{
-        return com.skydoves.balloon.createBalloon(_fragment.value!!.requireContext()) {
+    private fun createBalloon(text: String, fragment: SelectFragment): Balloon{
+        return com.skydoves.balloon.createBalloon(getApplication<Application>().applicationContext) {
             //setLayout(R.layout.nav_balloon)
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
@@ -59,14 +60,6 @@ class SelectViewModel: ViewModel() {
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.dodgerblue)
             //setOnBalloonClickListener(onBalloonClickListener)
-            // trueがこのページでのチュートリアル終了通知
-            if (flag){
-                setOnBalloonDismissListener {
-                    val transaction = _fragment.value!!.activity?.supportFragmentManager?.beginTransaction()
-                    transaction!!.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
-                    transaction.replace(R.id.container, HistoryFragment()).commit()
-                }
-            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
@@ -74,7 +67,7 @@ class SelectViewModel: ViewModel() {
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
             setOverlayShape(BalloonOverlayRect)
-            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
+            setLifecycleOwner(fragment.viewLifecycleOwner)
         }
     }
 
@@ -85,6 +78,14 @@ class SelectViewModel: ViewModel() {
         _holderView1.value = holderView
     }
 
+    fun showBalloonFlag(): Boolean?{
+        var flag: Boolean? = null
+        getApplication<Application>().applicationContext.let {
+            // 初回起動かどうかを判断
+            flag = preferenceBalloonRepository.read(it)
+        }
+        return flag
+    }
     fun recyclerViewBalloonWeb(): MutableLiveData<Balloon>{
         return _recyclerViewBalloonWeb
     }

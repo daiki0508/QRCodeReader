@@ -11,7 +11,9 @@ import androidx.fragment.app.activityViewModels
 import com.skydoves.balloon.*
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentScanBinding
+import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.ScanViewModel
@@ -55,11 +57,11 @@ class ScanFragment: Fragment() {
         viewModel.init(this)
         activity?.let {
             transaction = it.supportFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
         }
 
         // カメラでスキャンボタンをタップ時の処理
         binding.btCamera.setOnClickListener {
+            transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
             transaction.replace(R.id.container, CameraFragment()).commit()
         }
 
@@ -68,23 +70,43 @@ class ScanFragment: Fragment() {
             viewModel.setBundle()
         }
 
+        // bottomNavのobserver
         bottomNavViewModel.bottomNavView().observe(requireActivity(), {
             // trueなら表示
-            //if (viewModel.showBalloonFlag() == true) {
+            if (viewModel.showBalloonFlag() == true) {
                 // balloonの表示順番を設定
-                bottomNavViewModel.let {
-                    it.bottomNavBalloonScan().value!!
-                        .relayShowAlignTop(viewModel.cameraBalloon().value!!, binding.btCamera)
-                        .relayShowAlignBottom(viewModel.photoBalloon().value!!, binding.btPhoto)
+                with(viewModel){
+                    bottomNavViewModel.let {
+                        it.bottomNavBalloonScan().value!!
+                            .relayShowAlignTop(cameraBalloon().value!!, binding.btCamera)
+                            .relayShowAlignBottom(photoBalloon().value!!, binding.btPhoto)
 
-                    // balloonを表示
-                    it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonScan().value!!)
+                        // balloonを表示
+                        it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonScan().value!!)
+
+                        // photoBalloon、終了時の処理
+                        photoBalloon().value!!.setOnBalloonDismissListener {
+                            // selectFragmentへ遷移
+                            transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                            transaction.replace(R.id.container, SelectFragment()).commit()
+                        }
+                    }
                 }
-            //}
+            }
+        })
+
+        // bundleのobserver
+        viewModel.bundle().observe(this.viewLifecycleOwner, {
+            PhotoFragment().apply {
+                this.arguments = it
+                transaction.replace(R.id.container, this).commit()
+            }
         })
     }
 
-    fun photoFragment(){
-        transaction.replace(R.id.container, viewModel.photoFragment().value!!).commit()
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

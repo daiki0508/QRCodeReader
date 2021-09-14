@@ -11,33 +11,25 @@ class AfterScanViewModel: ViewModel() {
     private val _scanUri =  MutableLiveData<Uri>().apply {
         MutableLiveData<Uri>()
     }
-    private val activity = MutableLiveData<FragmentActivity>().apply {
-        MutableLiveData<FragmentActivity>()
-    }
-    private val fragment = MutableLiveData<AfterScanFragment>().apply {
-        MutableLiveData<AfterScanFragment>()
-    }
 
-    fun init(activity: FragmentActivity, scanUrl: String, fragment: AfterScanFragment){
+    fun init(scanUrl: String, fragment: AfterScanFragment){
         // グローバル変数に設定を代入
         _scanUri.value = Uri.parse(scanUrl)
-        this.activity.value = activity
-        this.fragment.value = fragment
 
         // ヴァリデーションチェック
-        validationCheck()
+        validationCheck(fragment)
     }
-    private fun validationCheck(){
+    private fun validationCheck(fragment: AfterScanFragment){
         // viewへ処理を渡す
         when(_scanUri.value!!.scheme){
             "http", "https" -> {
-                fragment.value!!.afterValidationCheck(valFlag = true, 0)
+                fragment.afterValidationCheck(valFlag = true, 0)
             }
             "geo" -> {
-                fragment.value!!.afterValidationCheck(valFlag = true, 1)
+                fragment.afterValidationCheck(valFlag = true, 1)
             }
             else -> {
-                fragment.value!!.afterValidationCheck(valFlag = false, type = null)
+                fragment.afterValidationCheck(valFlag = false, type = null)
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentPhotoBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.PhotoViewModel
@@ -92,6 +93,17 @@ class PhotoFragment: Fragment() {
                 }
             })
         }
+
+        // bundleのobserver
+        viewModel.bundle().observe(this.viewLifecycleOwner, {
+            AfterScanFragment().apply {
+                this.arguments = it
+
+                // AfterFragmentへの遷移
+                transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+                transaction.replace(R.id.container, this).commit()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,7 +121,8 @@ class PhotoFragment: Fragment() {
         when(item.itemId){
             android.R.id.home -> {
                 if (type == 0){
-                    transaction.replace(R.id.container, PhotoFragment()).commit()
+                    // フォトライブラリを開く
+                    viewModel.createGetDeviceImageIntent()
                 }else{
                     transaction.replace(R.id.container, ScanFragment()).commit()
                 }
@@ -132,9 +145,10 @@ class PhotoFragment: Fragment() {
             it.show()
         }
     }
-    fun afterScanFragment(){
-        // afterScanFragmentへの遷移
-        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-        transaction.replace(R.id.container, viewModel.afterScanFragment().value!!).commit()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

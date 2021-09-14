@@ -1,8 +1,10 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
@@ -19,34 +21,30 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class ScanViewModel(
-    private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient
-): ViewModel() {
-    private val _fragment = MutableLiveData<ScanFragment>().apply {
-        MutableLiveData<ScanFragment>()
-    }
-    private val _photoFragment = MutableLiveData<PhotoFragment>().apply {
-        MutableLiveData<PhotoFragment>()
-    }
+    private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
+    application: Application
+): AndroidViewModel(application) {
     private val _photoBalloon = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
     private val _cameraBalloon = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
+    private val _bundle = MutableLiveData<Bundle>().apply {
+        MutableLiveData<Bundle>()
+    }
 
     fun init(fragment: ScanFragment){
-        _fragment.value = fragment
-
         // balloonの設定
-        setBalloon()
+        setBalloon(fragment)
     }
-    private fun setBalloon(){
+    private fun setBalloon(fragment: ScanFragment){
         // scanFragment内のボタンの説明
-        _cameraBalloon.value = createBalloon("スマホのカメラ機能を用いてQRコードをスキャン出来ます", flag = false)
-        _photoBalloon.value = createBalloon("端末内に保存されている画像や、ドライブからQRコードをインポートできます", flag = true)
+        _cameraBalloon.value = createBalloon("スマホのカメラ機能を用いてQRコードをスキャン出来ます", fragment)
+        _photoBalloon.value = createBalloon("端末内に保存されている画像や、ドライブからQRコードをインポートできます", fragment)
     }
-    private fun createBalloon(text: String, flag: Boolean): Balloon{
-        return createBalloon(_fragment.value!!.requireContext()) {
+    private fun createBalloon(text: String, fragment: ScanFragment): Balloon{
+        return createBalloon(getApplication<Application>().applicationContext) {
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
             setHeight(65)
@@ -59,51 +57,35 @@ class ScanViewModel(
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.dodgerblue)
             //setOnBalloonClickListener(onBalloonClickListener)
-            // trueならこのページでのballoonは終了
-            if (flag){
-                setOnBalloonDismissListener {
-                    val transaction = _fragment.value!!.activity?.supportFragmentManager?.beginTransaction()
-                    transaction!!.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
-                    transaction.replace(R.id.container, SelectFragment()).commit()
-                }
-            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
             setOverlayPadding(6f)
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
-            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
+            setLifecycleOwner(fragment.viewLifecycleOwner)
         }
     }
     fun setBundle(){
-        _photoFragment.value = PhotoFragment()
-
         // bundleに値をセット
         val bundle = Bundle()
         bundle.putInt(IntentBundle.ScanType.name, 0)
-        _photoFragment.value!!.arguments = bundle
-
-        // viewへ処理を渡す
-        _fragment.value!!.photoFragment()
+        _bundle.value = bundle
     }
 
     fun showBalloonFlag(): Boolean?{
-        var flag: Boolean? = null
-        _fragment.value!!.activity?.let {
+        return with(getApplication<Application>().applicationContext) {
             // 初回起動かどうかを判断
-            flag = preferenceBalloonRepository.read(it)
-            preferenceBalloonRepository.save(it)
+            preferenceBalloonRepository.read(this)
         }
-        return flag
-    }
-    fun photoFragment(): MutableLiveData<PhotoFragment>{
-        return _photoFragment
     }
     fun photoBalloon(): MutableLiveData<Balloon>{
         return _photoBalloon
     }
     fun cameraBalloon(): MutableLiveData<Balloon>{
         return _cameraBalloon
+    }
+    fun bundle(): MutableLiveData<Bundle>{
+        return _bundle
     }
 }

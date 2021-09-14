@@ -12,16 +12,16 @@ class MyModule {
     val module = module {
         viewModel { MainViewModel() }
         viewModel { BottomNavViewModel() }
-        viewModel { ScanViewModel(get()) }
-        viewModel { CameraViewModel(get()) }
-        viewModel { PhotoViewModel() }
+        viewModel { ScanViewModel(get(), get()) }
+        viewModel { CameraViewModel(get(), get()) }
+        viewModel { PhotoViewModel(get()) }
         viewModel { AfterScanViewModel() }
-        viewModel { SelectViewModel() }
+        viewModel { SelectViewModel(get(), get()) }
         viewModel { CreateUrlViewModel() }
-        viewModel { HistoryViewModel(get()) }
-        viewModel { CreateMapViewModel(get()) }
-        viewModel { CreateAppsViewModel() }
-        viewModel { DisplayViewModel(get()) }
+        viewModel { HistoryViewModel(get(), get(), get()) }
+        viewModel { CreateMapViewModel(get(), get()) }
+        viewModel { CreateAppsViewModel(get()) }
+        viewModel { DisplayViewModel(get(), get()) }
     }
     val repository = module {
         factory { PreferenceHistoryRepositoryClient() }

@@ -8,34 +8,24 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlF
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 
 class CreateUrlViewModel: ViewModel() {
-    private val _fragment = MutableLiveData<CreateUrlFragment>().apply {
-        MutableLiveData<CreateUrlFragment>()
-    }
-    private val _displayFragment = MutableLiveData<DisplayFragment>().apply {
-        MutableLiveData<DisplayFragment>()
+    private val _bundle = MutableLiveData<Bundle>().apply {
+        MutableLiveData<Bundle>()
     }
 
-    fun init(fragment: CreateUrlFragment, displayFragment: DisplayFragment){
-        _fragment.value = fragment
-        _displayFragment.value = displayFragment
-    }
     fun setBundle(url: String){
         // 空文字チェック
+        var bundle: Bundle? = null
         if (url.isNotBlank()){
             // bundleに値をセット
-            val bundle = Bundle()
-            bundle.putString(IntentBundle.ScanUrl.name, url)
-            bundle.putInt(IntentBundle.ScanType.name, 0)
-            _displayFragment.value!!.arguments = bundle
-
-            // viewへ処理を渡す
-            _fragment.value!!.displayFragment()
-        }else{
-            _fragment.value!!.blackToast()
+            bundle = Bundle().apply {
+                this.putString(IntentBundle.ScanUrl.name, url)
+                this.putInt(IntentBundle.ScanType.name, 0)
+            }
         }
+        _bundle.value = bundle
     }
 
-    fun displayFragment(): MutableLiveData<DisplayFragment>{
-        return _displayFragment
+    fun bundle(): MutableLiveData<Bundle>{
+        return _bundle
     }
 }

@@ -12,8 +12,10 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
+import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class BottomNavViewModel: ViewModel() {
@@ -32,6 +34,9 @@ class BottomNavViewModel: ViewModel() {
     private val _bottomNavBalloonHistory = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
+    private val _bottomNavBalloonSettings = MutableLiveData<Balloon>().apply {
+        MutableLiveData<Balloon>()
+    }
 
     fun init(fragment: BottomNavFragment, navView: View){
         _fragment.value = fragment
@@ -42,27 +47,34 @@ class BottomNavViewModel: ViewModel() {
     }
     private fun setBalloon(){
         // navigationのScanの説明
-        _bottomNavBalloonScan.value = createBalloon().apply{
+        _bottomNavBalloonScan.value = createBalloon(flag = false).apply{
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_photo_camera_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "コード読み取り"
             this.getContentView().findViewById<TextView>(R.id.description).text = "主にQRコードのスキャンに関することが行えます"
         }
 
         // navigationのCreateの説明
-        _bottomNavBalloonCreate.value = createBalloon().apply {
+        _bottomNavBalloonCreate.value = createBalloon(flag = false).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_qr_code_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "コード生成"
             this.getContentView().findViewById<TextView>(R.id.description).text = "様々な種類のQRコードを作成できます"
         }
 
         // navigationのHistoryの説明
-        _bottomNavBalloonHistory.value = createBalloon().apply {
+        _bottomNavBalloonHistory.value = createBalloon(flag = false).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_history_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "履歴"
             this.getContentView().findViewById<TextView>(R.id.description).text = "QRコードのスキャン履歴の一覧が表示されます"
         }
+
+        // navigationのSettingsの説明
+        _bottomNavBalloonSettings.value = createBalloon(flag = true).apply {
+            this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_settings_24)
+            this.getContentView().findViewById<TextView>(R.id.title).text = "設定"
+            this.getContentView().findViewById<TextView>(R.id.description).text = "アプリの設定や情報などの項目を確認できます"
+        }
     }
-    private fun createBalloon(): Balloon{
+    private fun createBalloon(flag: Boolean): Balloon{
         return com.skydoves.balloon.createBalloon(_fragment.value!!.requireContext()) {
             setLayout(R.layout.nav_balloon)
             setArrowSize(10)
@@ -77,6 +89,23 @@ class BottomNavViewModel: ViewModel() {
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.darkorange)
             //setOnBalloonClickListener(onBalloonClickListener)
+            // trueがチュートリアルの終了
+            if (flag){
+                setOnBalloonDismissListener {
+                    _fragment.value!!.activity?.let {
+                        // チュートリアルの終了
+                        PreferenceBalloonRepositoryClient().save(it)
+
+                        // bottomNavigationの状態を更新
+                        _fragment.value!!.setChecked(0)
+
+                        // 元の画面に遷移
+                        val transaction = it.supportFragmentManager.beginTransaction()
+                        transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                        transaction.replace(R.id.container, ScanFragment()).commit()
+                    }
+                }
+            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
@@ -108,5 +137,11 @@ class BottomNavViewModel: ViewModel() {
         _fragment.value!!.setChecked(2)
 
         return _bottomNavBalloonHistory
+    }
+    fun bottomNavBalloonSettings(): MutableLiveData<Balloon>{
+        // bottomNavigationの状態を更新
+        _fragment.value!!.setChecked(3)
+
+        return _bottomNavBalloonSettings
     }
 }

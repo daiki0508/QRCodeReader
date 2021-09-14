@@ -69,11 +69,22 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
 
         // 初期設定
         activity?.let {
-            viewModel.init(it, this, DisplayFragment())
+            viewModel.init(this)
         }
 
         // 地図起動
-        viewModel.initGoogleMap()
+        viewModel.initGoogleMap(this)
+
+        // bundleのobserver
+        viewModel.bundle().observe(this.viewLifecycleOwner, {
+            DisplayFragment().apply {
+                this.arguments = it
+
+                // displayFragmentへ遷移
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                transaction.replace(R.id.container, this).commit()
+            }
+        })
     }
 
     @SuppressLint("MissingPermission")
@@ -115,7 +126,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         }
 
         // 権限の確認
-        viewModel.checkPermission()
+        viewModel.checkPermission(this)
     }
 
     @SuppressLint("MissingPermission")
@@ -125,11 +136,6 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
 
         // actionBarのlocationButtonを非表示に
         menu.getItem(0).isVisible = false
-    }
-    fun displayFragment(){
-        // displayFragmentへ遷移
-        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-        transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -145,7 +151,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
 
         when(item.itemId){
             R.id.nowLocation ->{
-                viewModel.checkPermission()
+                viewModel.checkPermission(this)
             }
             R.id.decision -> {
                 viewModel.setBundle()
@@ -154,5 +160,11 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
         }
 
         return retValue
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

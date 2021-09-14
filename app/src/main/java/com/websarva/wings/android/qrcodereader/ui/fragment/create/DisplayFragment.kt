@@ -64,9 +64,6 @@ class DisplayFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 初期設定
-        viewModel.init(this)
-
         // ヴァリデーションチェック
         viewModel.validationCheck(
             arguments?.getString(IntentBundle.ScanUrl.name)!!,
@@ -86,17 +83,14 @@ class DisplayFragment: Fragment() {
                     val displayRecyclerViewAdapter = RecyclerViewAdapter(viewModel, it)
                     binding.rvShare.adapter = displayRecyclerViewAdapter
                     binding.rvShare.layoutManager = LinearLayoutManager(it)
+                }else{
+                    exitError()
                 }
             })
         }
     }
 
-    fun blackToast(){
-        activity?.let {
-            Toast.makeText(it, "作成したいurlが入力されていません。", Toast.LENGTH_SHORT).show()
-        }
-    }
-    fun exitError() {
+    private fun exitError() {
         activity?.let {
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
             Toast.makeText(activity, "サポートされていないQRコードです", Toast.LENGTH_LONG).show()

@@ -79,10 +79,8 @@ class AfterScanFragment: Fragment() {
             it.hide()
         }
 
-        activity?.let {
-            // 初期設定
-            viewModel.init(it, arguments?.getString(IntentBundle.ScanUrl.name)!!, this)
-        }
+        // 初期設定
+        viewModel.init(arguments?.getString(IntentBundle.ScanUrl.name)!!, this)
     }
 
     fun afterValidationCheck(valFlag: Boolean, type: Int?){

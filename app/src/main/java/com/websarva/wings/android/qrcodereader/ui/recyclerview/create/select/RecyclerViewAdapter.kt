@@ -13,6 +13,7 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapF
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
 import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.SelectViewModel
@@ -84,8 +85,17 @@ class RecyclerViewAdapter(
                             .relayShowAlignBottom(recyclerViewBalloonMap().value!!, holderView1().value!!)
                             .relayShowAlignBottom(recyclerViewBalloonApp().value!!, holder.view)
 
-                        // balloonの表示
-                        it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonCreate().value!!)
+                        if (viewModel.showBalloonFlag() == true){
+                            // balloonの表示
+                            it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonCreate().value!!)
+                        }
+
+                        // アプリのballoonが非表示になった際の処理
+                        recyclerViewBalloonApp().value!!.setOnBalloonDismissListener {
+                            // HistoryFragmentへの遷移
+                            transaction.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
+                            transaction.replace(R.id.container, HistoryFragment()).commit()
+                        }
                     }
                 }
             }

@@ -10,6 +10,7 @@ import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,10 +29,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.hide()
 
-        //初期設定
-        viewModel.init(this)
-
         // fragmentの起動
+        supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
+
         if (viewModel.state().value == null){
             if (intent.action != Intent.ACTION_SEND){
                 Log.d("intent", "null")
@@ -40,21 +40,33 @@ class MainActivity : AppCompatActivity() {
                 Log.d("intent", "intent")
                 handleSendImage(intent)
             }
-            supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
         }
+
+        // bundleのobserver
+        viewModel.bundle().observe(this, {
+            if (it != null){
+                PhotoFragment().apply {
+                    this.arguments = it
+
+                    PhotoFragment().apply {
+                        // PhotoFragmentへ遷移
+                        supportFragmentManager.beginTransaction().replace(binding.container.id, this).commit()
+                    }
+                }
+            }else{
+                this.exitError()
+            }
+        })
     }
 
     private fun handleSendImage(intent: Intent){
         (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
             // ShareSheetから読みだされた場合
             Log.d("url", it.toString())
-            viewModel.validationCheck(it.toString())
+            viewModel.validationCheck(it.toString(), this)
         }
     }
-    fun photoFragment(){
-        supportFragmentManager.beginTransaction().replace(binding.container.id, viewModel.photoFragment().value!!).commit()
-    }
-    fun exitError(){
+    private fun exitError(){
         Log.e("ERROR", "不正な操作が行われた可能性があります。")
         finish()
     }

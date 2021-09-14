@@ -1,6 +1,7 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.create.web
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,24 +52,33 @@ class CreateUrlFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 初期設定
-        viewModel.init(this, DisplayFragment())
-
         // qrコード作成と空文字チェック
         binding.btCreate.setOnClickListener {
             viewModel.setBundle(binding.edUrl.text.toString())
         }
+
+        // bundleのobserver
+        viewModel.bundle().observe(this.viewLifecycleOwner, {
+            DisplayFragment().apply {
+                if (it != null){
+                    this.arguments = it
+
+                    // displayFragmentへ遷移
+                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                    transaction.replace(R.id.container, this).commit()
+                }else{
+                    this@CreateUrlFragment.blackToast()
+                }
+            }
+        })
     }
-    fun blackToast(){
+
+    private fun blackToast(){
+        Log.i("test", "called")
         // Toastを表示
         activity?.let {
             Toast.makeText(it, "作成したいurlが入力されていません。", Toast.LENGTH_SHORT).show()
         }
-    }
-    fun displayFragment(){
-        // displayFragmentへ遷移
-        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-        transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
     }
 
     override fun onDestroyView() {

@@ -56,9 +56,6 @@ class CreateAppsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 初期設定
-        viewModel.init(this)
-
         // インストール済みアプリの情報取得
         viewModel.getAppsInfo()
 
@@ -69,10 +66,22 @@ class CreateAppsFragment: Fragment() {
             binding.rvApps.addItemDecoration(DividerItemDecoration(it, DividerItemDecoration.VERTICAL))
             binding.rvApps.layoutManager = LinearLayoutManager(it)
         }
+
+        // bundleのobserver
+        viewModel.bundle().observe(this.viewLifecycleOwner, {
+            DisplayFragment().apply {
+                this.arguments = it
+
+                // DisplayFragmentへの遷移
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                transaction.replace(R.id.container, this).commit()
+            }
+        })
     }
 
-    fun displayFragment(){
-        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-        transaction.replace(R.id.container, viewModel.displayFragment().value!!).commit()
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

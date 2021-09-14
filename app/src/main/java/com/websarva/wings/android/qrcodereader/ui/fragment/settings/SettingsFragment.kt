@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.databinding.FragmentSettingsBinding
+import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -15,6 +18,7 @@ class SettingsFragment: Fragment() {
     get() = _binding!!
 
     private val mainViewModel by sharedViewModel<MainViewModel>()
+    private val bottomNavViewModel by activityViewModels<BottomNavViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,5 +35,10 @@ class SettingsFragment: Fragment() {
 
         // 初期設定
         mainViewModel.setState(4)
+
+        // balloonの表示
+        bottomNavViewModel.let {
+            it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonSettings().value!!)
+        }
     }
 }

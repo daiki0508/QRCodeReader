@@ -1,8 +1,10 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +18,7 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.History
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
+import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
@@ -26,17 +29,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class HistoryViewModel(
-    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient
-): ViewModel() {
-    private val _activity = MutableLiveData<FragmentActivity>().apply {
-        MutableLiveData<FragmentActivity>()
-    }
-    private val _fragment = MutableLiveData<HistoryFragment>().apply {
-        MutableLiveData<HistoryFragment>()
-    }
-    private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
-        MutableLiveData<AfterScanFragment>()
-    }
+    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
+    private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
+    application: Application
+): AndroidViewModel(application) {
     private val _historyBalloon = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
@@ -49,22 +45,21 @@ class HistoryViewModel(
     private val _historyList = MutableLiveData<MutableList<MutableMap<String, Any>>>().apply {
         MutableLiveData<MutableList<MutableMap<String, String>>>()
     }
+    private val _bundle = MutableLiveData<Bundle>().apply {
+        MutableLiveData<Bundle>()
+    }
 
-    fun init(activity: FragmentActivity, fragment: HistoryFragment){
-        _activity.value = activity
-        _fragment.value = fragment
-        _afterScanFragment.value = AfterScanFragment()
-
+    fun init(fragment: HistoryFragment){
         // balloonの設定
-        setBalloon()
+        setBalloon(fragment)
     }
-    private fun setBalloon(){
-        _historyBalloon.value = createBalloon("QRコードのスキャン履歴が表示されますタップすると詳細が表示されます", flag = false)
-        _historyBalloon2.value = createBalloon("タップすると詳細が表示されます", flag = false)
-        _historyBalloon3.value = createBalloon("左スワイプ、もしくは長押しで履歴の削除が可能です", flag = true)
+    private fun setBalloon(fragment: HistoryFragment){
+        _historyBalloon.value = createBalloon("QRコードのスキャン履歴が表示されますタップすると詳細が表示されます", fragment)
+        _historyBalloon2.value = createBalloon("タップすると詳細が表示されます", fragment)
+        _historyBalloon3.value = createBalloon("左スワイプ、もしくは長押しで履歴の削除が可能です", fragment)
     }
-    private fun createBalloon(text: String, flag: Boolean): Balloon{
-        return com.skydoves.balloon.createBalloon(_fragment.value!!.requireContext()) {
+    private fun createBalloon(text: String, fragment: HistoryFragment): Balloon{
+        return com.skydoves.balloon.createBalloon(getApplication<Application>().applicationContext) {
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
             setHeight(65)
@@ -77,14 +72,6 @@ class HistoryViewModel(
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.dodgerblue)
             //setOnBalloonClickListener(onBalloonClickListener)
-            // trueがこのページでのチュートリアル説明は終了した通知
-            if (flag){
-                setOnBalloonDismissListener {
-                    val transaction = _fragment.value!!.activity?.supportFragmentManager?.beginTransaction()
-                    transaction!!.setCustomAnimations(R.anim.nav_dynamic_enter_anim, R.anim.nav_dynamic_exit_anim)
-                    transaction.replace(R.id.container, SettingsFragment()).commit()
-                }
-            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
@@ -92,7 +79,7 @@ class HistoryViewModel(
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
             setOverlayShape(BalloonOverlayRect)
-            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
+            setLifecycleOwner(fragment.viewLifecycleOwner)
         }
     }
     fun getHistoryData(){
@@ -100,24 +87,24 @@ class HistoryViewModel(
             val historyList: MutableList<MutableMap<String, Any>> = mutableListOf()
             var history: MutableMap<String, Any>
             // keyListを取得し、分割
-            if (preferenceHistoryRepository.keyList(_activity.value!!).list.isNotBlank()){
-                for (list in preferenceHistoryRepository.keyList(_activity.value!!).list.split("\n")){
-                    // 対応したdataを取得
-                    val data = preferenceHistoryRepository.read(_activity.value!!, keyName = list)
-                    // mutableMapに代入
-                    history = mutableMapOf(
-                        History.Title.name to data.title,
-                        History.Type.name to data.type,
-                        History.Time.name to data.time
-                    )
-                    // mutableListに追加
-                    historyList.add(history)
+            getApplication<Application>().let {
+                if (preferenceHistoryRepository.keyList(it).list.isNotBlank()) {
+                    for (list in preferenceHistoryRepository.keyList(it).list.split("\n")) {
+                        // 対応したdataを取得
+                        val data =
+                            preferenceHistoryRepository.read(it, keyName = list)
+                        // mutableMapに代入
+                        history = mutableMapOf(
+                            History.Title.name to data.title,
+                            History.Type.name to data.type,
+                            History.Time.name to data.time
+                        )
+                        // mutableListに追加
+                        historyList.add(history)
+                    }
                 }
                 // livedataに代入
                 _historyList.value = historyList
-
-                // viewへ処理を渡す
-                _fragment.value!!.recyclerView(_historyList.value!!)
             }
         }
     }
@@ -125,17 +112,19 @@ class HistoryViewModel(
         // bundleへデータセット
         val bundle = Bundle()
         bundle.putString(IntentBundle.ScanUrl.name, url)
-        _afterScanFragment.value!!.arguments = bundle
-
-        // viewへ処理を渡す
-        _fragment.value!!.afterScanFragment()
+        _bundle.value = bundle
     }
     fun delete(adapter: RecyclerViewAdapter, position: Int){
-        preferenceHistoryRepository.delete(_activity.value!!, adapter.items[position][History.Title.name] as String)
+        preferenceHistoryRepository.delete(getApplication<Application>().applicationContext, adapter.items[position][History.Title.name] as String)
     }
 
-    fun afterScanFragment(): MutableLiveData<AfterScanFragment>{
-        return _afterScanFragment
+    fun showBalloonFlag(): Boolean?{
+        var flag: Boolean? = null
+        getApplication<Application>().applicationContext.let {
+            // 初回起動かどうかを判断
+            flag = preferenceBalloonRepository.read(it)
+        }
+        return flag
     }
     fun historyBalloon(): MutableLiveData<Balloon>{
         return _historyBalloon
@@ -146,8 +135,10 @@ class HistoryViewModel(
     fun historyBalloon3(): MutableLiveData<Balloon>{
         return _historyBalloon3
     }
-
-    init {
-        _historyList.value = mutableListOf()
+    fun historyList(): MutableLiveData<MutableList<MutableMap<String, Any>>>{
+        return _historyList
+    }
+    fun bundle(): MutableLiveData<Bundle>{
+        return _bundle
     }
 }

@@ -13,39 +13,28 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragm
 import com.websarva.wings.android.qrcodereader.ui.main.MainActivity
 
 class MainViewModel: ViewModel() {
-    private val _activity = MutableLiveData<MainActivity>().apply {
-        MutableLiveData<MainActivity>()
-    }
-    private val _photoFragment = MutableLiveData<PhotoFragment>().apply {
-        MutableLiveData<PhotoFragment>()
-    }
     private val _state = MutableLiveData<Int?>().apply {
         MutableLiveData<Int>()
     }
-
-    fun init(activity: MainActivity){
-        _activity.value = activity
+    private val _bundle = MutableLiveData<Bundle>().apply {
+        MutableLiveData<Bundle>()
     }
-    fun validationCheck(url: String){
-        _activity.value?.let {
+
+    fun validationCheck(url: String, activity: MainActivity){
+        activity.let {
             // ヴァリデーションチェック
+            var bundle: Bundle? = null
             if (
                 (it.intent.action == Intent.ACTION_SEND)
                 && (it.intent.type?.startsWith("image/") == true)
             ){
-                _photoFragment.value = PhotoFragment()
-
                 // bundleに値をセット
-                val bundle = Bundle()
-                bundle.putString(IntentBundle.ScanUrl.name, url)
-                bundle.putInt(IntentBundle.ScanType.name, 1)
-                _photoFragment.value!!.arguments = bundle
-
-                // viewへ処理を渡す
-                _activity.value!!.photoFragment()
-            }else{
-                _activity.value!!.exitError()
+                bundle = Bundle().apply {
+                    this.putString(IntentBundle.ScanUrl.name, url)
+                    this.putInt(IntentBundle.ScanType.name, 1)
+                }
             }
+            _bundle.value = bundle
         }
     }
 
@@ -56,8 +45,8 @@ class MainViewModel: ViewModel() {
     fun state(): MutableLiveData<Int?>{
         return _state
     }
-    fun photoFragment(): MutableLiveData<PhotoFragment>{
-        return _photoFragment
+    fun bundle(): MutableLiveData<Bundle>{
+        return _bundle
     }
 
     init {

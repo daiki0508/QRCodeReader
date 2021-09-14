@@ -1,9 +1,11 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,11 +21,9 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 class DisplayViewModel(
-    private val saveBitmapClient: SaveBitmapClientRepository
-): ViewModel() {
-    private val _fragment = MutableLiveData<DisplayFragment>().apply {
-        MutableLiveData<CreateUrlFragment>()
-    }
+    private val saveBitmapClient: SaveBitmapClientRepository,
+    application: Application
+): AndroidViewModel(application) {
     private val _qrBitmap = MutableLiveData<Bitmap>().apply {
         MutableLiveData<String>()
     }
@@ -31,9 +31,6 @@ class DisplayViewModel(
         MutableLiveData<Uri?>()
     }
 
-    fun init(fragment: DisplayFragment){
-        _fragment.value = fragment
-    }
     fun validationCheck(url: String, type: Int){
         val uri = Uri.parse(url)
 
@@ -47,7 +44,8 @@ class DisplayViewModel(
                         // QRコード作成
                         createQR(url)
                     }else{
-                        _fragment.value!!.exitError()
+                        //_fragment.value!!.exitError()
+                        _qrBitmap.value = null
                     }
                 }
                 1 -> {
@@ -55,7 +53,8 @@ class DisplayViewModel(
                         // QRコード作成
                         createQR(url)
                     }else{
-                        _fragment.value!!.exitError()
+                        //_fragment.value!!.exitError()
+                        _qrBitmap.value = null
                     }
                 }
                 2 -> {
@@ -63,15 +62,15 @@ class DisplayViewModel(
                         // QRコード作成
                         createQR(url)
                     }else{
-                        _fragment.value!!.exitError()
+                        //_fragment.value!!.exitError()
+                        _qrBitmap.value = null
                     }
                 }
                 else -> {
-                    _fragment.value!!.exitError()
+                    //_fragment.value!!.exitError()
+                    _qrBitmap.value = null
                 }
             }
-        }else{
-            _fragment.value!!.blackToast()
         }
     }
     private fun createQR(url: String){
@@ -90,7 +89,7 @@ class DisplayViewModel(
         }
     }
     private suspend fun saveBitmap(qrcode: Bitmap) {
-        _fragment.value!!.activity?.let {
+        getApplication<Application>().applicationContext.let {
             saveBitmapClient.save(it, qrcode)
         }
     }
@@ -99,7 +98,7 @@ class DisplayViewModel(
             // 画面回転時にuriを再取得しないようにする
             if (this.value == null){
                 this.value = try {
-                    _fragment.value!!.activity?.let {
+                    getApplication<Application>().applicationContext.let {
                         val file = File(it.cacheDir, CacheName().cache)
                         // fileからuriを取得
                         FileProvider.getUriForFile(it, "${it.packageName}.fileprovider", file)
@@ -113,7 +112,7 @@ class DisplayViewModel(
         return _qrCodeUri
     }
     fun deleteChaChe(){
-        _fragment.value!!.activity?.let {
+        getApplication<Application>().applicationContext.let {
             saveBitmapClient.delete(it)
         }
     }

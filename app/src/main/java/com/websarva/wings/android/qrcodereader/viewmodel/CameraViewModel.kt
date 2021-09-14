@@ -1,6 +1,7 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
 import android.Manifest
+import android.app.Application
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,45 +26,36 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class CameraViewModel(
-    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient
-): ViewModel() {
-    private val _afterScanFragment = MutableLiveData<AfterScanFragment>().apply {
-        MutableLiveData<AfterScanFragment>()
-    }
-    private val _mainFragment = MutableLiveData<CameraFragment>().apply {
-        MutableLiveData<CameraFragment>()
-    }
-    private val _activity = MutableLiveData<FragmentActivity>().apply {
-        MutableLiveData<FragmentActivity>()
-    }
+    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
+    application: Application
+): AndroidViewModel(application) {
     private val _barcodeView = MutableLiveData<CompoundBarcodeView>().apply {
         MutableLiveData<CompoundBarcodeView>()
     }
+    private val _bundle = MutableLiveData<Bundle>().apply {
+        MutableLiveData<Bundle>()
+    }
 
-    fun init(activity: FragmentActivity, barcodeView: CompoundBarcodeView, cameraFragment: CameraFragment){
-        // activityやfragmentをグローバル変数に代入
-        _activity.value = activity
-        _afterScanFragment.value  = AfterScanFragment()
+    fun init(barcodeView: CompoundBarcodeView, fragment: CameraFragment){
         _barcodeView.value = barcodeView
-        _mainFragment.value = cameraFragment
 
         // barcodeViewの設定
-        initBarcodeView()
+        initBarcodeView(fragment)
     }
-    private fun initBarcodeView(){
+    private fun initBarcodeView(fragment: CameraFragment){
         _barcodeView.value?.let {
             val formats = listOf(BarcodeFormat.QR_CODE)
             it.decoderFactory = DefaultDecoderFactory(formats)
             it.cameraSettings.isAutoFocusEnabled = true
 
             // 権限確認
-            checkPermission()
+            checkPermission(fragment)
         }
     }
-    private fun checkPermission(){
+    private fun checkPermission(fragment: CameraFragment){
         // 権限を既に取得しているかを確認
         if (ActivityCompat.checkSelfPermission(
-                _mainFragment.value!!.requireContext(),
+                getApplication<Application>().applicationContext,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED){
             Log.i("check", "GetPermission")
@@ -72,17 +65,17 @@ class CameraViewModel(
         }else{
             Log.i("check", "requestPermission")
 
-            val requestPermission = _mainFragment.value!!.registerForActivityResult(
+            val requestPermission = fragment.registerForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ){
                 if (it){
                     // 許可時の処理
                     Log.i("result", "Permission Result")
-                    checkPermission()
+                    checkPermission(fragment)
                 }else{
                     // 拒否時の処理
                     Log.w("Warning", "PERMISSION REQUEST WAS DENIED FOR USER")
-                    _mainFragment.value!!.scanFragment()
+                    fragment.scanFragment()
                 }
             }
 
@@ -99,7 +92,7 @@ class CameraViewModel(
                 val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
                 val uri = Uri.parse(it.text)
                 preferenceHistoryRepository.write(
-                    _activity.value!!,
+                    getApplication<Application>().applicationContext,
                     keyName = it.text,
                     SaveData(
                         title = it.text,
@@ -117,10 +110,7 @@ class CameraViewModel(
                 // bundleへのデータセットと値の受け渡し準備
                 val bundle = Bundle()
                 bundle.putString(IntentBundle.ScanUrl.name, it.text)
-                _afterScanFragment.value!!.arguments = bundle
-
-                // viewへ処理を渡す
-                _mainFragment.value!!.afterScanFragment()
+                _bundle.value = bundle
             }
         }
     }
@@ -128,7 +118,7 @@ class CameraViewModel(
     fun barcodeView(): MutableLiveData<CompoundBarcodeView>{
         return _barcodeView
     }
-    fun afterScanFragment(): MutableLiveData<AfterScanFragment>{
-        return _afterScanFragment
+    fun bundle(): MutableLiveData<Bundle>{
+        return _bundle
     }
 }
