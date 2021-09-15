@@ -11,7 +11,7 @@ import org.koin.dsl.module
 class MyModule {
     val module = module {
         viewModel { MainViewModel() }
-        viewModel { BottomNavViewModel() }
+        viewModel { BottomNavViewModel(get()) }
         viewModel { ScanViewModel(get(), get()) }
         viewModel { CameraViewModel(get(), get()) }
         viewModel { PhotoViewModel(get()) }
@@ -22,6 +22,7 @@ class MyModule {
         viewModel { CreateMapViewModel(get(), get()) }
         viewModel { CreateAppsViewModel(get()) }
         viewModel { DisplayViewModel(get(), get()) }
+        viewModel { SettingsViewModel(get(), get()) }
     }
     val repository = module {
         factory { PreferenceHistoryRepositoryClient() }

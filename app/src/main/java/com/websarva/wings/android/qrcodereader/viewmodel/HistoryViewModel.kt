@@ -118,13 +118,11 @@ class HistoryViewModel(
         preferenceHistoryRepository.delete(getApplication<Application>().applicationContext, adapter.items[position][History.Title.name] as String)
     }
 
-    fun showBalloonFlag(): Boolean?{
-        var flag: Boolean? = null
-        getApplication<Application>().applicationContext.let {
+    fun showBalloonFlag(): Boolean{
+        return with(getApplication<Application>().applicationContext) {
             // 初回起動かどうかを判断
-            flag = preferenceBalloonRepository.read(it)
+            preferenceBalloonRepository.read(this)
         }
-        return flag
     }
     fun historyBalloon(): MutableLiveData<Balloon>{
         return _historyBalloon

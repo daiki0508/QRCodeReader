@@ -73,16 +73,16 @@ class ScanFragment: Fragment() {
         // bottomNavのobserver
         bottomNavViewModel.bottomNavView().observe(requireActivity(), {
             // trueなら表示
-            if (viewModel.showBalloonFlag() == true) {
+            if (viewModel.showBalloonFlag()) {
                 // balloonの表示順番を設定
                 with(viewModel){
                     bottomNavViewModel.let {
-                        it.bottomNavBalloonScan().value!!
+                        it.bottomNavBalloonScan(flag = true).value!!
                             .relayShowAlignTop(cameraBalloon().value!!, binding.btCamera)
                             .relayShowAlignBottom(photoBalloon().value!!, binding.btPhoto)
 
                         // balloonを表示
-                        it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonScan().value!!)
+                        it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonScan(flag = true).value!!)
 
                         // photoBalloon、終了時の処理
                         photoBalloon().value!!.setOnBalloonDismissListener {
@@ -92,6 +92,8 @@ class ScanFragment: Fragment() {
                         }
                     }
                 }
+            }else{
+                bottomNavViewModel.bottomNavBalloonScan(flag = false)
             }
         })
 

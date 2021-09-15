@@ -65,7 +65,7 @@ class HistoryFragment: Fragment(), View.OnCreateContextMenuListener{
         // contextMenuの登録
         registerForContextMenu(binding.rvHistory)
 
-        if (viewModel.showBalloonFlag() == true){
+        if (viewModel.showBalloonFlag()){
             with(viewModel){
                 bottomNavViewModel.let {
                     binding.tvNoContents.let { tv ->

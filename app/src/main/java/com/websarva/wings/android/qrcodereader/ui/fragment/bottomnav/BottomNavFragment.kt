@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.websarva.wings.android.qrcodereader.R
@@ -90,9 +91,37 @@ class BottomNavFragment: Fragment() {
                 }
             }
         }
+
+        viewModel.bottomNavScanCalled().observe(this.viewLifecycleOwner, {
+            // NavigationのScanを表示状態にする
+            binding.bottomNav.menu.getItem(0).isChecked = true
+        })
+
+        viewModel.bottomNavCreateCalled().observe(this.viewLifecycleOwner, {
+            // NavigationのCreateを表示状態にする
+            if (it){
+                binding.bottomNav.menu.getItem(1).isChecked = true
+            }
+        })
+
+        viewModel.bottomNavHistoryCalled().observe(this.viewLifecycleOwner, {
+            // NavigationのHistoryを表示状態にする
+            if (it){
+                binding.bottomNav.menu.getItem(2).isChecked = true
+            }
+        })
+
+        viewModel.bottomNavSettingsCalled().observe(this.viewLifecycleOwner, {
+            // NavigationのSettingsを表示状態にする
+            if (it){
+                binding.bottomNav.menu.getItem(3).isChecked = true
+            }
+        })
     }
 
-    fun setChecked(itemId: Int){
-        binding.bottomNav.menu.getItem(itemId).isChecked = true
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

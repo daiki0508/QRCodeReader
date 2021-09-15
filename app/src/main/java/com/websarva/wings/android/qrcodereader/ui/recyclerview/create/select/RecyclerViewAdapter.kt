@@ -85,7 +85,7 @@ class RecyclerViewAdapter(
                             .relayShowAlignBottom(recyclerViewBalloonMap().value!!, holderView1().value!!)
                             .relayShowAlignBottom(recyclerViewBalloonApp().value!!, holder.view)
 
-                        if (viewModel.showBalloonFlag() == true){
+                        if (viewModel.showBalloonFlag()){
                             // balloonの表示
                             it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonCreate().value!!)
                         }

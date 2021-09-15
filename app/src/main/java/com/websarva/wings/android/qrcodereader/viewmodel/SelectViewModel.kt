@@ -78,13 +78,11 @@ class SelectViewModel(
         _holderView1.value = holderView
     }
 
-    fun showBalloonFlag(): Boolean?{
-        var flag: Boolean? = null
-        getApplication<Application>().applicationContext.let {
+    fun showBalloonFlag(): Boolean{
+        return with(getApplication<Application>().applicationContext) {
             // 初回起動かどうかを判断
-            flag = preferenceBalloonRepository.read(it)
+            preferenceBalloonRepository.read(this)
         }
-        return flag
     }
     fun recyclerViewBalloonWeb(): MutableLiveData<Balloon>{
         return _recyclerViewBalloonWeb

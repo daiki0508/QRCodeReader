@@ -1,8 +1,10 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
@@ -18,10 +20,9 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
-class BottomNavViewModel: ViewModel() {
-    private val _fragment = MutableLiveData<BottomNavFragment>().apply {
-        MutableLiveData<BottomNavFragment>()
-    }
+class BottomNavViewModel(
+    application: Application
+) : AndroidViewModel(application) {
     private val _bottomNavView = MutableLiveData<View>().apply {
         MutableLiveData<View>()
     }
@@ -37,45 +38,56 @@ class BottomNavViewModel: ViewModel() {
     private val _bottomNavBalloonSettings = MutableLiveData<Balloon>().apply {
         MutableLiveData<Balloon>()
     }
+    private val _bottomNavScanCalled = MutableLiveData<Boolean>().apply {
+        MutableLiveData<Boolean>()
+    }
+    private val _bottomNavCreateCalled = MutableLiveData<Boolean>().apply {
+        MutableLiveData<Boolean>()
+    }
+    private val _bottomNavHistoryCalled = MutableLiveData<Boolean>().apply {
+        MutableLiveData<Boolean>()
+    }
+    private val _bottomNavSettingsCalled = MutableLiveData<Boolean>().apply {
+        MutableLiveData<Boolean>()
+    }
 
     fun init(fragment: BottomNavFragment, navView: View){
-        _fragment.value = fragment
         _bottomNavView.value = navView
 
         // balloonの設定
-        setBalloon()
+        setBalloon(fragment)
     }
-    private fun setBalloon(){
+    private fun setBalloon(fragment: BottomNavFragment){
         // navigationのScanの説明
-        _bottomNavBalloonScan.value = createBalloon(flag = false).apply{
+        _bottomNavBalloonScan.value = createBalloon(fragment).apply{
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_photo_camera_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "コード読み取り"
             this.getContentView().findViewById<TextView>(R.id.description).text = "主にQRコードのスキャンに関することが行えます"
         }
 
         // navigationのCreateの説明
-        _bottomNavBalloonCreate.value = createBalloon(flag = false).apply {
+        _bottomNavBalloonCreate.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_qr_code_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "コード生成"
             this.getContentView().findViewById<TextView>(R.id.description).text = "様々な種類のQRコードを作成できます"
         }
 
         // navigationのHistoryの説明
-        _bottomNavBalloonHistory.value = createBalloon(flag = false).apply {
+        _bottomNavBalloonHistory.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_history_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "履歴"
             this.getContentView().findViewById<TextView>(R.id.description).text = "QRコードのスキャン履歴の一覧が表示されます"
         }
 
         // navigationのSettingsの説明
-        _bottomNavBalloonSettings.value = createBalloon(flag = true).apply {
+        _bottomNavBalloonSettings.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_settings_24)
             this.getContentView().findViewById<TextView>(R.id.title).text = "設定"
             this.getContentView().findViewById<TextView>(R.id.description).text = "アプリの設定や情報などの項目を確認できます"
         }
     }
-    private fun createBalloon(flag: Boolean): Balloon{
-        return com.skydoves.balloon.createBalloon(_fragment.value!!.requireContext()) {
+    private fun createBalloon(fragment: BottomNavFragment): Balloon{
+        return com.skydoves.balloon.createBalloon(getApplication<Application>().applicationContext) {
             setLayout(R.layout.nav_balloon)
             setArrowSize(10)
             setWidth(BalloonSizeSpec.WRAP)
@@ -89,23 +101,6 @@ class BottomNavViewModel: ViewModel() {
             //setIconDrawable(ContextCompat.getDrawable(context, R.drawable.ic_profile))
             setBackgroundColorResource(R.color.darkorange)
             //setOnBalloonClickListener(onBalloonClickListener)
-            // trueがチュートリアルの終了
-            if (flag){
-                setOnBalloonDismissListener {
-                    _fragment.value!!.activity?.let {
-                        // チュートリアルの終了
-                        PreferenceBalloonRepositoryClient().save(it)
-
-                        // bottomNavigationの状態を更新
-                        _fragment.value!!.setChecked(0)
-
-                        // 元の画面に遷移
-                        val transaction = it.supportFragmentManager.beginTransaction()
-                        transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
-                        transaction.replace(R.id.container, ScanFragment()).commit()
-                    }
-                }
-            }
             setBalloonAnimation(BalloonAnimation.OVERSHOOT)
             setIsVisibleOverlay(true)
             setOverlayColorResource(R.color.darkgray)
@@ -113,35 +108,52 @@ class BottomNavViewModel: ViewModel() {
             setBalloonOverlayAnimation(BalloonOverlayAnimation.FADE)
             setDismissWhenOverlayClicked(false)
             setOverlayShape(BalloonOverlayRect)
-            setLifecycleOwner(_fragment.value!!.viewLifecycleOwner)
+            setLifecycleOwner(fragment.viewLifecycleOwner)
         }
+    }
+
+    fun write(){
+        // チュートリアルの終了
+        PreferenceBalloonRepositoryClient().save(getApplication<Application>().applicationContext)
     }
 
     fun bottomNavView(): MutableLiveData<View>{
         return _bottomNavView
     }
-    fun bottomNavBalloonScan(): MutableLiveData<Balloon>{
+    fun bottomNavBalloonScan(flag: Boolean): MutableLiveData<Balloon>{
         // bottomNavigationの状態を更新
-        _fragment.value!!.setChecked(0)
+        _bottomNavScanCalled.value = flag
 
         return _bottomNavBalloonScan
     }
     fun bottomNavBalloonCreate(): MutableLiveData<Balloon>{
         // bottomNavigationの状態を更新
-        _fragment.value!!.setChecked(1)
+        _bottomNavCreateCalled.value = true
 
         return _bottomNavBalloonCreate
     }
     fun bottomNavBalloonHistory(): MutableLiveData<Balloon>{
         // bottomNavigationの状態を更新
-        _fragment.value!!.setChecked(2)
+        _bottomNavHistoryCalled.value = true
 
         return _bottomNavBalloonHistory
     }
     fun bottomNavBalloonSettings(): MutableLiveData<Balloon>{
         // bottomNavigationの状態を更新
-        _fragment.value!!.setChecked(3)
+        _bottomNavSettingsCalled.value = true
 
         return _bottomNavBalloonSettings
+    }
+    fun bottomNavScanCalled(): MutableLiveData<Boolean>{
+        return _bottomNavScanCalled
+    }
+    fun bottomNavCreateCalled(): MutableLiveData<Boolean>{
+        return _bottomNavCreateCalled
+    }
+    fun bottomNavHistoryCalled(): MutableLiveData<Boolean>{
+        return _bottomNavHistoryCalled
+    }
+    fun bottomNavSettingsCalled(): MutableLiveData<Boolean>{
+        return _bottomNavSettingsCalled
     }
 }
