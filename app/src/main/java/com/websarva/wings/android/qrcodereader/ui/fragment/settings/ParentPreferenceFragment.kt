@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.fragment.app.FragmentTransaction
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -13,8 +14,12 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 
 class ParentPreferenceFragment: PreferenceFragmentCompat() {
+    private lateinit var transaction: FragmentTransaction
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference, rootKey)
+
+        transaction = activity?.supportFragmentManager!!.beginTransaction()
 
         // テーマに関する設定
         findPreference<ListPreference>("theme")?.apply {
@@ -29,8 +34,7 @@ class ParentPreferenceFragment: PreferenceFragmentCompat() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
                 }
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction!!.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
                 transaction.replace(R.id.container, ScanFragment()).commit()
 
                 true
@@ -69,7 +73,8 @@ class ParentPreferenceFragment: PreferenceFragmentCompat() {
         findPreference<Preference>("license")?.apply {
             setOnPreferenceClickListener {
                 activity.let {
-                    // TODO("未実装")
+                    transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+                    transaction.replace(R.id.container, LicensesFragment()).commit()
                 }
                 true
             }
