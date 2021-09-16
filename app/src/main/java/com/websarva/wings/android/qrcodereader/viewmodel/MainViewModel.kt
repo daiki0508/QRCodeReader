@@ -31,7 +31,7 @@ class MainViewModel: ViewModel() {
                 // bundleに値をセット
                 bundle = Bundle().apply {
                     this.putString(IntentBundle.ScanUrl.name, url)
-                    this.putInt(IntentBundle.ScanType.name, 1)
+                    this.putInt(IntentBundle.ScanType.name, 2)
                 }
             }
             _bundle.value = bundle

@@ -76,10 +76,11 @@ class PhotoViewModel(
             }
         else -> null
     }
-    fun setBundle(){
+    fun setBundle(type: Int){
         // bundleに値をセット
         val bundle = Bundle()
         bundle.putString(IntentBundle.ScanUrl.name, _url.value)
+        bundle.putInt(IntentBundle.ScanType.name, type)
         _bundle.value = bundle
     }
 
@@ -94,6 +95,7 @@ class PhotoViewModel(
     }
 
     init {
+        Log.d("test0", "aaaaaa")
         _url.value = ""
     }
 }

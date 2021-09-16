@@ -16,7 +16,9 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
 import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
@@ -47,8 +49,17 @@ class AfterScanFragment: Fragment() {
                         R.anim.nav_up_pop_enter_anim,
                         R.anim.nav_up_pop_exit_anim
                     )
-                    transaction.replace(R.id.container, CameraFragment()).commit()
-
+                    when(arguments?.getInt(IntentBundle.ScanType.name)){
+                        0 -> transaction.replace(R.id.container, CameraFragment()).commit()
+                        1 -> {
+                            transaction.replace(R.id.container, ScanFragment()).commit()
+                        }
+                        2 -> {
+                            transaction.remove(this@AfterScanFragment).commit()
+                            activity?.finish()
+                        }else ->{
+                        }
+                    }
                 } else if (it == 3) {
                     transaction.setCustomAnimations(
                         R.anim.nav_up_pop_enter_anim,
@@ -87,6 +98,7 @@ class AfterScanFragment: Fragment() {
         // OKはtrue
         if (valFlag){
             binding.scanUrl.text = viewModel.scanUri().value.toString()
+            viewModel.historySave()
             createRecyclerView(type!!)
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")

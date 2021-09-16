@@ -1,13 +1,27 @@
 package com.websarva.wings.android.qrcodereader.viewmodel
 
+import android.app.Application
 import android.content.pm.ActivityInfo
 import android.net.Uri
+import android.os.Bundle
+import android.text.format.DateFormat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.websarva.wings.android.qrcodereader.model.IntentBundle
+import com.websarva.wings.android.qrcodereader.model.SaveData
+import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.BundleEvent
+import kotlinx.coroutines.launch
+import java.util.*
 
-class AfterScanViewModel: ViewModel() {
+class AfterScanViewModel(
+    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
+    application: Application
+) : AndroidViewModel(application) {
     private val _scanUri =  MutableLiveData<Uri>().apply {
         MutableLiveData<Uri>()
     }
@@ -30,6 +44,29 @@ class AfterScanViewModel: ViewModel() {
             }
             else -> {
                 fragment.afterValidationCheck(valFlag = false, type = null)
+            }
+        }
+    }
+    fun historySave(){
+        viewModelScope.launch {
+            // 履歴を作成、保存
+            val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
+            _scanUri.value?.let {
+                preferenceHistoryRepository.write(
+                    getApplication<Application>().applicationContext,
+                    keyName = it.toString(),
+                    SaveData(
+                        title = it.toString(),
+                        type = if (it.scheme == "http" || it.scheme == "https"){
+                            0
+                        }else if (it.scheme == "geo") {
+                            1
+                        } else {
+                            2
+                        },
+                        time = date.toString()
+                    )
+                )
             }
         }
     }

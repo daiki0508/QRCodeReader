@@ -69,7 +69,7 @@ class ScanViewModel(
     fun setBundle(){
         // bundleに値をセット
         val bundle = Bundle()
-        bundle.putInt(IntentBundle.ScanType.name, 0)
+        bundle.putInt(IntentBundle.ScanType.name, 1)
         _bundle.value = bundle
     }
 

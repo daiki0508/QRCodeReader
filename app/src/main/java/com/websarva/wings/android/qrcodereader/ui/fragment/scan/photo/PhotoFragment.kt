@@ -30,7 +30,7 @@ class PhotoFragment: Fragment() {
     private val mainViewModel by sharedViewModel<MainViewModel>()
 
     private lateinit var transaction: FragmentTransaction
-    private var type: Int = 0
+    private var type: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,32 +67,38 @@ class PhotoFragment: Fragment() {
         viewModel.init(this)
 
         //qrcodeObserver
-        activity?.let {
-            viewModel.url().observe(it, { url ->
-                if (!url.isNullOrBlank()){
-                    setQRCode(viewModel.qrcode().value!!, url)
-                }else{
-                    arguments?.getInt(IntentBundle.ScanType.name, 0)?.let { type ->
-                        this.type = type
+        viewModel.url().observe(this.viewLifecycleOwner, { url ->
+            if (!url.isNullOrBlank()) {
+                setQRCode(viewModel.qrcode().value!!, url)
+                Log.d("test", "called")
+            } else {
+                arguments?.getInt(IntentBundle.ScanType.name, 1)?.let { type ->
+                    this.type = type
+                    Log.d("test2", type.toString())
 
-                        when (type) {
-                            0 -> {
-                                // フォトライブラリを開く
-                                viewModel.createGetDeviceImageIntent()
-                            }
-                            1 -> {
-                                // 現在のfragmentをmainViewModelに通知
-                                mainViewModel.setState(0)
-                                viewModel.readQRCodeFromImage(Uri.parse(arguments?.getString(IntentBundle.ScanUrl.name, "")))
-                            }
-                            else -> {
-
-                            }
+                    when (type) {
+                        1 -> {
+                            // フォトライブラリを開く
+                            viewModel.createGetDeviceImageIntent()
+                        }
+                        2 -> {
+                            // 現在のfragmentをmainViewModelに通知
+                            mainViewModel.setState(0)
+                            viewModel.readQRCodeFromImage(
+                                Uri.parse(
+                                    arguments?.getString(
+                                        IntentBundle.ScanUrl.name,
+                                        ""
+                                    )
+                                )
+                            )
+                        }
+                        else -> {
                         }
                     }
                 }
-            })
-        }
+            }
+        })
 
         // bundleのobserver
         viewModel.bundle().observe(this.viewLifecycleOwner, {
@@ -120,14 +126,14 @@ class PhotoFragment: Fragment() {
 
         when(item.itemId){
             android.R.id.home -> {
-                if (type == 0){
+                if (type == 1){
                     // フォトライブラリを開く
                     viewModel.createGetDeviceImageIntent()
                 }else{
                     transaction.replace(R.id.container, ScanFragment()).commit()
                 }
             }
-            R.id.decision -> viewModel.setBundle()
+            R.id.decision -> viewModel.setBundle(type)
             else -> retValue = super.onOptionsItemSelected(item)
         }
 

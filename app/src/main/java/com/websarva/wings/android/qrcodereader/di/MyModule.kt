@@ -13,9 +13,9 @@ class MyModule {
         viewModel { MainViewModel() }
         viewModel { BottomNavViewModel(get()) }
         viewModel { ScanViewModel(get(), get()) }
-        viewModel { CameraViewModel(get(), get()) }
+        viewModel { CameraViewModel(get()) }
         viewModel { PhotoViewModel(get()) }
-        viewModel { AfterScanViewModel() }
+        viewModel { AfterScanViewModel(get(), get()) }
         viewModel { SelectViewModel(get(), get()) }
         viewModel { CreateUrlViewModel() }
         viewModel { HistoryViewModel(get(), get(), get()) }

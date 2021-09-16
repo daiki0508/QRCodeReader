@@ -48,10 +48,9 @@ class MainActivity : AppCompatActivity() {
                 PhotoFragment().apply {
                     this.arguments = it
 
-                    PhotoFragment().apply {
-                        // PhotoFragmentへ遷移
-                        supportFragmentManager.beginTransaction().replace(binding.container.id, this).commit()
-                    }
+                    // PhotoFragmentへ遷移
+                    supportFragmentManager.beginTransaction().replace(binding.container.id, this)
+                        .commit()
                 }
             }else{
                 this.exitError()

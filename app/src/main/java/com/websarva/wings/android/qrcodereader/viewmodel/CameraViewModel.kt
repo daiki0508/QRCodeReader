@@ -9,32 +9,28 @@ import android.text.format.DateFormat
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.BundleEvent
 import kotlinx.coroutines.launch
 import java.util.*
 
 class CameraViewModel(
-    private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
     application: Application
 ): AndroidViewModel(application) {
     private val _barcodeView = MutableLiveData<CompoundBarcodeView>().apply {
         MutableLiveData<CompoundBarcodeView>()
     }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
+    private val _bundle = MutableLiveData<BundleEvent<Bundle>>().apply {
+        MutableLiveData<BundleEvent<Bundle>>()
     }
+    val bundle: LiveData<BundleEvent<Bundle>> = _bundle
 
     fun init(barcodeView: CompoundBarcodeView, fragment: CameraFragment){
         _barcodeView.value = barcodeView
@@ -87,9 +83,9 @@ class CameraViewModel(
         barcodeView.decodeSingle {
             Log.d("scanResult", it.text)
 
-            viewModelScope.launch {
+            //viewModelScope.launch {
                 // 履歴を作成、保存
-                val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
+                /*val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
                 val uri = Uri.parse(it.text)
                 preferenceHistoryRepository.write(
                     getApplication<Application>().applicationContext,
@@ -105,20 +101,18 @@ class CameraViewModel(
                         },
                         time = date.toString()
                     )
-                )
+                )*/
 
                 // bundleへのデータセットと値の受け渡し準備
                 val bundle = Bundle()
                 bundle.putString(IntentBundle.ScanUrl.name, it.text)
-                _bundle.value = bundle
-            }
+                bundle.putInt(IntentBundle.ScanType.name, 0)
+                _bundle.value = BundleEvent(bundle)
+            //}
         }
     }
 
     fun barcodeView(): MutableLiveData<CompoundBarcodeView>{
         return _barcodeView
-    }
-    fun bundle(): MutableLiveData<Bundle>{
-        return _bundle
     }
 }

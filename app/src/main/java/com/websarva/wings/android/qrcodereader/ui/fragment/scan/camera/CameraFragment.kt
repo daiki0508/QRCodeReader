@@ -59,13 +59,17 @@ class CameraFragment: Fragment() {
         viewModel.init(binding.barcodeView, this)
 
         // bundleのobserver
-        viewModel.bundle().observe(this.viewLifecycleOwner, {
-            AfterScanFragment().apply {
-                this.arguments = it
-
-                // afterScanFragmentへの遷移
-                transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
-                transaction.replace(R.id.container, this).commit()
+        viewModel.bundle.observe(this.viewLifecycleOwner, { event ->
+            event.contentIfNotHandled.let {
+                if (it != null){
+                    AfterScanFragment().apply {
+                        this.arguments = it
+                        //this.arguments = it
+                        // afterScanFragmentへの遷移
+                        transaction.setCustomAnimations(R.anim.nav_up_enter_anim, R.anim.nav_up_exit_anim)
+                        transaction.replace(R.id.container, this).commit()
+                    }
+                }
             }
         })
     }
