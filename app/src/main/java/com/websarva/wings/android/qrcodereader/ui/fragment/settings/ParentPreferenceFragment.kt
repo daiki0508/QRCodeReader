@@ -10,6 +10,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.websarva.wings.android.qrcodereader.BuildConfig
 import com.websarva.wings.android.qrcodereader.R
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 
 class ParentPreferenceFragment: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -28,6 +29,10 @@ class ParentPreferenceFragment: PreferenceFragmentCompat() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
                 }
+                val transaction = activity?.supportFragmentManager?.beginTransaction()
+                transaction!!.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
+                transaction.replace(R.id.container, ScanFragment()).commit()
+
                 true
             }
         }

@@ -82,33 +82,11 @@ class CameraViewModel(
     private fun scanResult(barcodeView: CompoundBarcodeView){
         barcodeView.decodeSingle {
             Log.d("scanResult", it.text)
-
-            //viewModelScope.launch {
-                // 履歴を作成、保存
-                /*val date = DateFormat.format("yyyy/MM/dd kk:mm", Calendar.getInstance())
-                val uri = Uri.parse(it.text)
-                preferenceHistoryRepository.write(
-                    getApplication<Application>().applicationContext,
-                    keyName = it.text,
-                    SaveData(
-                        title = it.text,
-                        type = if (uri.scheme == "http" || uri.scheme == "https"){
-                            0
-                        }else if (uri.scheme == "geo") {
-                            1
-                        } else {
-                            2
-                        },
-                        time = date.toString()
-                    )
-                )*/
-
-                // bundleへのデータセットと値の受け渡し準備
-                val bundle = Bundle()
-                bundle.putString(IntentBundle.ScanUrl.name, it.text)
-                bundle.putInt(IntentBundle.ScanType.name, 0)
-                _bundle.value = BundleEvent(bundle)
-            //}
+            // bundleへのデータセットと値の受け渡し準備
+            val bundle = Bundle()
+            bundle.putString(IntentBundle.ScanUrl.name, it.text)
+            bundle.putInt(IntentBundle.ScanType.name, 0)
+            _bundle.value = BundleEvent(bundle)
         }
     }
 
