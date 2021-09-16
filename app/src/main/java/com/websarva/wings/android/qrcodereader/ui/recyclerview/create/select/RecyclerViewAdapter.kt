@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
-import com.skydoves.balloon.showAlignBottom
 import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
@@ -15,8 +14,8 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
-import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.SelectViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.SelectViewModel
 
 class RecyclerViewAdapter(
     private val activity: FragmentActivity,
@@ -41,7 +40,7 @@ class RecyclerViewAdapter(
 
         when(position){
             0 -> {
-                holder.title.text = "ウェブページ"
+                holder.title.text = activity.getString(R.string.rv_title_web)
                 holder.icon.setImageResource(R.drawable.ic_baseline_language_24_white)
 
                 // タップ時の処理
@@ -53,7 +52,7 @@ class RecyclerViewAdapter(
                 viewModel.setHolderView0(holder.view)
             }
             1 -> {
-                holder.title.text = "地図"
+                holder.title.text = activity.getString(R.string.rv_title_maps)
                 holder.icon.setImageResource(R.drawable.ic_baseline_map_24_white)
 
                 // タップ時の処理
@@ -67,7 +66,7 @@ class RecyclerViewAdapter(
                 viewModel.setHolderView1(holder.view)
             }
             2 -> {
-                holder.title.text = "アプリ"
+                holder.title.text = activity.getString(R.string.rv_title_app)
                 holder.icon.setImageResource(R.drawable.ic_baseline_apps_24_white)
 
                 // タップ時の処理

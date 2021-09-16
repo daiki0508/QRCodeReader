@@ -9,12 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.skydoves.balloon.showAlignBottom
 import com.websarva.wings.android.qrcodereader.databinding.FragmentSelectBinding
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.select.RecyclerViewAdapter
-import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.SelectViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.SelectViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

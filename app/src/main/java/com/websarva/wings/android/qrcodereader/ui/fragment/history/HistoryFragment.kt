@@ -10,16 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.skydoves.balloon.showAlignBottom
 import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentHistoryBinding
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.settings.SettingsFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.history.RecyclerViewAdapter
-import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.HistoryViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.history.HistoryViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

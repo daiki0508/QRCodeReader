@@ -1,24 +1,18 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.scan
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.createBalloon
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
-import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class ScanViewModel(
     private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
@@ -40,8 +34,10 @@ class ScanViewModel(
     }
     private fun setBalloon(fragment: ScanFragment){
         // scanFragment内のボタンの説明
-        _cameraBalloon.value = createBalloon("スマホのカメラ機能を用いてQRコードをスキャン出来ます", fragment)
-        _photoBalloon.value = createBalloon("端末内に保存されている画像や、ドライブからQRコードをインポートできます", fragment)
+        getApplication<Application>().applicationContext?.let {
+            _cameraBalloon.value = createBalloon(it.getString(R.string.scan_description_balloon0), fragment)
+            _photoBalloon.value = createBalloon(it.getString(R.string.scan_description_balloon1), fragment)
+        }
     }
     private fun createBalloon(text: String, fragment: ScanFragment): Balloon{
         return createBalloon(getApplication<Application>().applicationContext) {

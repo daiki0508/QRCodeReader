@@ -1,20 +1,14 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.scan
 
 import android.app.Application
-import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.os.Bundle
 import android.text.format.DateFormat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.BundleEvent
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.AfterScanFragment
 import kotlinx.coroutines.launch
 import java.util.*
 

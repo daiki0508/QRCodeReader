@@ -14,7 +14,7 @@ import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateAppsBin
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.app.RecyclerViewAdapter
-import com.websarva.wings.android.qrcodereader.viewmodel.CreateAppsViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.app.CreateAppsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateAppsFragment: Fragment() {

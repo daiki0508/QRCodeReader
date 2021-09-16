@@ -1,32 +1,23 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.history
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
-import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.History
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.model.SaveData
 import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.settings.SettingsFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.history.RecyclerViewAdapter
 import kotlinx.coroutines.launch
-import java.util.*
 
 class HistoryViewModel(
     private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
@@ -54,9 +45,11 @@ class HistoryViewModel(
         setBalloon(fragment)
     }
     private fun setBalloon(fragment: HistoryFragment){
-        _historyBalloon.value = createBalloon("QRコードのスキャン履歴が表示されますタップすると詳細が表示されます", fragment)
-        _historyBalloon2.value = createBalloon("タップすると詳細が表示されます", fragment)
-        _historyBalloon3.value = createBalloon("左スワイプ、もしくは長押しで履歴の削除が可能です", fragment)
+        getApplication<Application>().applicationContext?.let {
+            _historyBalloon.value = createBalloon(it.getString(R.string.history_description_balloon0), fragment)
+            _historyBalloon2.value = createBalloon(it.getString(R.string.history_description_balloon1), fragment)
+            _historyBalloon3.value = createBalloon(it.getString(R.string.history_description_balloon2), fragment)
+        }
     }
     private fun createBalloon(text: String, fragment: HistoryFragment): Balloon{
         return com.skydoves.balloon.createBalloon(getApplication<Application>().applicationContext) {

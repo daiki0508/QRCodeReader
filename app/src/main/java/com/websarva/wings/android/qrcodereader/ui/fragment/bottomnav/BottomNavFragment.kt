@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.websarva.wings.android.qrcodereader.R
@@ -13,10 +12,9 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.settings.SettingsFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BottomNavFragment: Fragment() {
     private var _binding: FragmentBottomnavBinding? = null

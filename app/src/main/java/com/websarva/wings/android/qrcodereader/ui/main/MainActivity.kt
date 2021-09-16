@@ -11,9 +11,8 @@ import androidx.preference.PreferenceManager
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -70,7 +69,6 @@ class MainActivity : AppCompatActivity() {
     private fun handleSendImage(intent: Intent){
         (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
             // ShareSheetから読みだされた場合
-            Log.d("url", it.toString())
             viewModel.validationCheck(it.toString(), this)
         }
     }

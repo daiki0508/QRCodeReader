@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.App
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
-import com.websarva.wings.android.qrcodereader.viewmodel.CreateAppsViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.app.CreateAppsViewModel
 
 class RecyclerViewAdapter(
     private val items: MutableList<MutableMap<String, Any>>,

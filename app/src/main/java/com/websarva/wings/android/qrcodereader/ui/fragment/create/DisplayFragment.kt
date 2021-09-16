@@ -17,7 +17,7 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateApps
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.display.RecyclerViewAdapter
-import com.websarva.wings.android.qrcodereader.viewmodel.DisplayViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.DisplayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DisplayFragment: Fragment() {
@@ -93,7 +93,7 @@ class DisplayFragment: Fragment() {
     private fun exitError() {
         activity?.let {
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
-            Toast.makeText(activity, "サポートされていないQRコードです", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, R.string.no_support_qrcode, Toast.LENGTH_LONG).show()
             transaction.remove(this).commit()
             it.finish()
         }

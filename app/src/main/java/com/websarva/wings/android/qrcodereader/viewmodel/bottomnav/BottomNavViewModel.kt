@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.bottomnav
 
 import android.app.Application
 import android.view.View
@@ -6,19 +6,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
 import com.skydoves.balloon.overlay.BalloonOverlayAnimation
-import com.skydoves.balloon.overlay.BalloonOverlayCircle
 import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 
 class BottomNavViewModel(
     application: Application
@@ -61,29 +56,37 @@ class BottomNavViewModel(
         // navigationのScanの説明
         _bottomNavBalloonScan.value = createBalloon(fragment).apply{
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_photo_camera_24)
-            this.getContentView().findViewById<TextView>(R.id.title).text = "コード読み取り"
-            this.getContentView().findViewById<TextView>(R.id.description).text = "主にQRコードのスキャンに関することが行えます"
+            getApplication<Application>().applicationContext?.let {
+                this.getContentView().findViewById<TextView>(R.id.title).text = it.getString(R.string.nav_title_balloon_scan)
+                this.getContentView().findViewById<TextView>(R.id.description).text = it.getString(R.string.nav_description_balloon_scan)
+            }
         }
 
         // navigationのCreateの説明
         _bottomNavBalloonCreate.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_qr_code_24)
-            this.getContentView().findViewById<TextView>(R.id.title).text = "コード生成"
-            this.getContentView().findViewById<TextView>(R.id.description).text = "様々な種類のQRコードを作成できます"
+            getApplication<Application>().applicationContext?.let {
+                this.getContentView().findViewById<TextView>(R.id.title).text = it.getString(R.string.nav_title_balloon_create)
+                this.getContentView().findViewById<TextView>(R.id.description).text = it.getString(R.string.nav_description_balloon_create)
+            }
         }
 
         // navigationのHistoryの説明
         _bottomNavBalloonHistory.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_history_24)
-            this.getContentView().findViewById<TextView>(R.id.title).text = "履歴"
-            this.getContentView().findViewById<TextView>(R.id.description).text = "QRコードのスキャン履歴の一覧が表示されます"
+            getApplication<Application>().applicationContext?.let {
+                this.getContentView().findViewById<TextView>(R.id.title).text = it.getString(R.string.nav_title_balloon_history)
+                this.getContentView().findViewById<TextView>(R.id.description).text = it.getString(R.string.nav_description_balloon_history)
+            }
         }
 
         // navigationのSettingsの説明
         _bottomNavBalloonSettings.value = createBalloon(fragment).apply {
             this.getContentView().findViewById<ImageView>(R.id.icon).setImageResource(R.drawable.ic_baseline_settings_24)
-            this.getContentView().findViewById<TextView>(R.id.title).text = "設定"
-            this.getContentView().findViewById<TextView>(R.id.description).text = "アプリの設定や情報などの項目を確認できます"
+            getApplication<Application>().applicationContext?.let {
+                this.getContentView().findViewById<TextView>(R.id.title).text = it.getString(R.string.nav_title_balloon_settings)
+                this.getContentView().findViewById<TextView>(R.id.description).text = it.getString(R.string.nav_description_balloon_settings)
+            }
         }
     }
     private fun createBalloon(fragment: BottomNavFragment): Balloon{

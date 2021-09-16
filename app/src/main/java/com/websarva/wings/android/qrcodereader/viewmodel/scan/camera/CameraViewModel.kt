@@ -1,11 +1,9 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.scan.camera
 
 import android.Manifest
 import android.app.Application
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -14,12 +12,8 @@ import com.google.zxing.BarcodeFormat
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.model.SaveData
-import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.BundleEvent
-import kotlinx.coroutines.launch
-import java.util.*
 
 class CameraViewModel(
     application: Application
@@ -81,7 +75,7 @@ class CameraViewModel(
     }
     private fun scanResult(barcodeView: CompoundBarcodeView){
         barcodeView.decodeSingle {
-            Log.d("scanResult", it.text)
+            // Log.d("scanResult", it.text)
             // bundleへのデータセットと値の受け渡し準備
             val bundle = Bundle()
             bundle.putString(IntentBundle.ScanUrl.name, it.text)

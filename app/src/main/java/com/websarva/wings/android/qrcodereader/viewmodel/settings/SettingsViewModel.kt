@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.settings
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

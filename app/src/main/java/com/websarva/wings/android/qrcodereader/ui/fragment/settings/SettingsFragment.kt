@@ -10,9 +10,9 @@ import com.skydoves.balloon.showAlignTop
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentSettingsBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.BottomNavViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.SettingsViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -61,5 +61,11 @@ class SettingsFragment: Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
     }
 }

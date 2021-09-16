@@ -2,14 +2,13 @@ package com.websarva.wings.android.qrcodereader.ui.recyclerview.history
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.model.History
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.HistoryViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.history.HistoryViewModel
 
 class RecyclerViewAdapter(
     val items: MutableList<MutableMap<String, Any>>,

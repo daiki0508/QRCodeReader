@@ -1,7 +1,5 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -14,10 +12,10 @@ import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentPhotoBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.PhotoViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.scan.photo.PhotoViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -74,7 +72,6 @@ class PhotoFragment: Fragment() {
             } else {
                 arguments?.getInt(IntentBundle.ScanType.name, 1)?.let { type ->
                     this.type = type
-                    Log.d("test2", type.toString())
 
                     when (type) {
                         1 -> {
@@ -146,7 +143,7 @@ class PhotoFragment: Fragment() {
 
         // toolBarに関する設定
         (activity as AppCompatActivity).supportActionBar?.let {
-            it.title = "画像からスキャン"
+            it.title = getString(R.string.photo_toolbar_title)
             it.setDisplayHomeAsUpEnabled(true)
             it.show()
         }

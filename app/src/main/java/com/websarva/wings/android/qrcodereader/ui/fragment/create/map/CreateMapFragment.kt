@@ -1,10 +1,8 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.create.map
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -19,7 +17,7 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateMapBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.CreateMapViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.map.CreateMapViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateMapFragment : Fragment(), OnMapReadyCallback {
@@ -118,7 +116,7 @@ class CreateMapFragment : Fragment(), OnMapReadyCallback {
                 // map上のマーカを削除
                 mMap.clear()
                 // 新しいマーカを設定
-                mMap.addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)).title("Now Location"))
+                mMap.addMarker(MarkerOptions().position(LatLng(it.latitude, it.longitude)).title(getString(R.string.now_location)))
                 // 状態を保存
                 viewModel.setLatLng(it.latitude, it.longitude)
             }

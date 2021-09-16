@@ -1,6 +1,30 @@
 <resources>
     <string name="app_name">QRCodeReader</string>
+    <string name="photo_toolbar_title">画像からスキャン</string>
+    <string name="rv_title_browser">ブラウザで開く</string>
+    <string name="rv_title_copy">コピーする</string>
+    <string name="rv_title_share">他のアプリで共有する</string>
+    <string name="rv_title_open_map">地図を開く</string>
+    <string name="complete_copy_msg">"クリップボードにコピーしました"</string>
+    <string name="no_share_apps">共有できる他のアプリがありません</string>
+    <string name="scan_description_balloon0">スマホのカメラ機能を用いてQRコードをスキャン出来ます</string>
+    <string name="scan_description_balloon1">端末内に保存されている画像や、ドライブからQRコードをインポートできます</string>
+
+    <string name="now_location">Now Location</string>
+    <string name="no_url">作成したいURLが入力されていません</string>
+    <string name="no_support_qrcode">サポートされていないQRコードです</string>
+    <string name="share_sheet_title">共有</string>
+    <string name="rv_title_web">ウェブページ</string>
+    <string name="rv_title_maps">地図</string>
+    <string name="rv_title_app">アプリ</string>
+    <string name="create_description_balloon0">http,httpsから始まるウェブページのQRコードを作成できます</string>
+    <string name="create_description_balloon1">現在地などの好きな場所の座標をQRコード化できます</string>
+    <string name="create_description_balloon2">端末内にインストールされているアプリのダウンロードQRコードを作成できます</string>
+
     <string name="history_context">削除する</string>
+    <string name="history_description_balloon0">"QRコードのスキャン履歴が表示されますタップすると詳細が表示されます</string>
+    <string name="history_description_balloon1">"タップすると詳細が表示されます</string>
+    <string name="history_description_balloon2">"左スワイプ、もしくは長押しで履歴の削除が可能です</string>
 
     <string-array name="themeEntries">
         <item>ライト</item>
@@ -10,4 +34,13 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+
+    <string name="nav_title_balloon_scan">コード読み取り</string>
+    <string name="nav_description_balloon_scan">主にQRコードのスキャンに関することが行えます</string>
+    <string name="nav_title_balloon_create">コード生成</string>
+    <string name="nav_description_balloon_create">様々な種類のQRコードを作成できます</string>
+    <string name="nav_title_balloon_history">履歴</string>
+    <string name="nav_description_balloon_history">QRコードのスキャン履歴の一覧が表示されます</string>
+    <string name="nav_title_balloon_settings">設定</string>
+    <string name="nav_description_balloon_settings">アプリの設定や情報などの項目を確認できます</string>
 </resources>

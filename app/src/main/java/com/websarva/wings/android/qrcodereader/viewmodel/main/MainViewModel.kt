@@ -1,15 +1,10 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.main
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skydoves.balloon.Balloon
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.ui.main.MainActivity
 
 class MainViewModel: ViewModel() {

@@ -1,16 +1,12 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.create.app
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.websarva.wings.android.qrcodereader.model.App
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.app.CreateAppsFragment
 
 class CreateAppsViewModel(
     application: Application

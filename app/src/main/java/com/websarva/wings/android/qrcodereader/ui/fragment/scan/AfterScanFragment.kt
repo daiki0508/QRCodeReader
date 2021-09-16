@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.ui.fragment.afterscan
+package com.websarva.wings.android.qrcodereader.ui.fragment.scan
 
 import android.os.Bundle
 import android.util.Log
@@ -16,12 +16,10 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentAfterscanBinding
 import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.CameraFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.afterscan.RecyclerViewAdapter
-import com.websarva.wings.android.qrcodereader.viewmodel.AfterScanViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.scan.AfterScanViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class AfterScanFragment: Fragment() {
@@ -102,7 +100,7 @@ class AfterScanFragment: Fragment() {
             createRecyclerView(type!!)
         }else{
             Log.e("ERROR", "不正な操作が行われた可能性があります。")
-            Toast.makeText(activity, "サポートされていないQRコードです", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, R.string.no_support_qrcode, Toast.LENGTH_LONG).show()
             activity?.let {
                 transaction.remove(this).commit()
                 it.finish()

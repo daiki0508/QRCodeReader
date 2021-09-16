@@ -13,7 +13,7 @@ import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCreateurlBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.CreateUrlViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.web.CreateUrlViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreateUrlFragment: Fragment() {
@@ -74,10 +74,10 @@ class CreateUrlFragment: Fragment() {
     }
 
     private fun blackToast(){
-        Log.i("test", "called")
+        Log.d("test", "called")
         // Toastを表示
         activity?.let {
-            Toast.makeText(it, "作成したいurlが入力されていません。", Toast.LENGTH_SHORT).show()
+            Toast.makeText(it, R.string.no_url, Toast.LENGTH_SHORT).show()
         }
     }
 

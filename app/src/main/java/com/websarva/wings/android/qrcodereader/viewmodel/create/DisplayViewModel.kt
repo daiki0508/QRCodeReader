@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.create
 
 import android.app.Application
 import android.graphics.Bitmap
@@ -7,15 +7,12 @@ import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.websarva.wings.android.qrcodereader.model.CacheName
 import com.websarva.wings.android.qrcodereader.repository.SaveBitmapClientRepository
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.web.CreateUrlFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 import kotlinx.coroutines.launch
 import java.io.File
 import java.lang.IllegalArgumentException

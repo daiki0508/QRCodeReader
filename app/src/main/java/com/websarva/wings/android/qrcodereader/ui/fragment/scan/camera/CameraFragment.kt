@@ -1,23 +1,17 @@
 package com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera
 
-import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.databinding.FragmentCameraBinding
-import com.websarva.wings.android.qrcodereader.ui.fragment.afterscan.AfterScanFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
+import com.websarva.wings.android.qrcodereader.ui.fragment.scan.AfterScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
-import com.websarva.wings.android.qrcodereader.viewmodel.MainViewModel
-import com.websarva.wings.android.qrcodereader.viewmodel.CameraViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.scan.camera.CameraViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CameraFragment: Fragment() {

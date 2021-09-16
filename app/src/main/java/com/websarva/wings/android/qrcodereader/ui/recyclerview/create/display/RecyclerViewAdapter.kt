@@ -2,8 +2,6 @@ package com.websarva.wings.android.qrcodereader.ui.recyclerview.create.display
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.recyclerview.create.RecyclerViewHolder
-import com.websarva.wings.android.qrcodereader.viewmodel.DisplayViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.create.DisplayViewModel
 
 class RecyclerViewAdapter(
     private val viewModel: DisplayViewModel,
@@ -26,7 +24,7 @@ class RecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        holder.title.text = "他のアプリで共有する"
+        holder.title.text = activity.getString(R.string.rv_title_share)
         holder.icon.setImageResource(R.drawable.ic_baseline_share_24_white)
 
         // タップ時の処理
@@ -38,10 +36,10 @@ class RecyclerViewAdapter(
 
                 // 共有開始
                 try {
-                    activity.startActivity(Intent.createChooser(this, "共有"))
+                    activity.startActivity(Intent.createChooser(this, activity.getString(R.string.share_sheet_title)))
                 } catch (e: ActivityNotFoundException) {
                     Log.w("Warning", "SHARE ACTIVITY NOT FOUND")
-                    Toast.makeText(activity, "共有できるアプリがありません", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, activity.getString(R.string.no_share_apps), Toast.LENGTH_LONG).show()
                 }
             }
         }

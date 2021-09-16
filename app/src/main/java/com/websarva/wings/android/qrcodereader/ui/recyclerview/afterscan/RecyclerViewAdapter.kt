@@ -7,11 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.websarva.wings.android.qrcodereader.R
 
 class RecyclerViewAdapter(
-    private val activity: Activity,
+    private val activity: FragmentActivity,
     private val uri: Uri,
     private val type: Int
 ): RecyclerView.Adapter<RecyclerViewHolder>() {
@@ -29,7 +30,7 @@ class RecyclerViewAdapter(
                     // Browserで開く
                     0 -> {
                         holder.icon.setImageResource(R.drawable.ic_baseline_open_in_browser_24_white)
-                        holder.text.text = "ブラウザで開く"
+                        holder.text.text = activity.getString(R.string.rv_title_browser)
 
                         // Browserで開くをタップ時の処理
                         holder.view.setOnClickListener {
@@ -49,19 +50,19 @@ class RecyclerViewAdapter(
                     // コピーする
                     1 -> {
                         holder.icon.setImageResource(R.drawable.ic_baseline_content_copy_24_white)
-                        holder.text.text = "コピーする"
+                        holder.text.text = activity.getString(R.string.rv_title_copy)
 
                         // コピーするをタップ時の処理
                         holder.view.setOnClickListener {
                             val clipBound = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                             clipBound.setPrimaryClip(ClipData.newUri(activity.contentResolver, "", uri))
-                            Toast.makeText(activity, "クリップボードにコピーしました", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, R.string.complete_copy_msg, Toast.LENGTH_SHORT).show()
                         }
                     }
                     // 他のアプリで共有する
                     2 -> {
                         holder.icon.setImageResource(R.drawable.ic_baseline_share_24_white)
-                        holder.text.text = "他のアプリで共有する"
+                        holder.text.text = activity.getString(R.string.rv_title_share)
 
                         // タップ時の動作
                         holder.view.setOnClickListener {
@@ -77,7 +78,7 @@ class RecyclerViewAdapter(
                                         activity.startActivity(Intent.createChooser(this, "共有"))
                                     }catch (e: ActivityNotFoundException){
                                         Log.w("Warning", "SHARE ACTIVITY NOT FOUND")
-                                        Toast.makeText(activity, "共有できるアプリがありません", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(activity, R.string.no_share_apps, Toast.LENGTH_LONG).show()
                                     }
                                 }else{
                                     Log.e("ERROR", "不正な操作が行われた可能性があります")
@@ -90,7 +91,7 @@ class RecyclerViewAdapter(
             }
             1 -> {
                 holder.icon.setImageResource(R.drawable.ic_baseline_map_24_white)
-                holder.text.text = "地図を開く"
+                holder.text.text = activity.getString(R.string.rv_title_open_map)
 
                 // Browserで開くをタップ時の処理
                 holder.view.setOnClickListener {

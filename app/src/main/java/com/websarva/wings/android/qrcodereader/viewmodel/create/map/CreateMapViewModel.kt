@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.create.map
 
 import android.Manifest
 import android.app.Application
@@ -8,10 +8,8 @@ import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.websarva.wings.android.qrcodereader.R
@@ -19,7 +17,6 @@ import com.websarva.wings.android.qrcodereader.model.IntentBundle
 import com.websarva.wings.android.qrcodereader.model.SaveLatLng
 import com.websarva.wings.android.qrcodereader.repository.PreferenceMapRepositoryClient
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.create.DisplayFragment
 
 class CreateMapViewModel(
     private val preferenceMapRepository: PreferenceMapRepositoryClient, application: Application

@@ -1,10 +1,9 @@
-package com.websarva.wings.android.qrcodereader.viewmodel
+package com.websarva.wings.android.qrcodereader.viewmodel.create
 
 import android.app.Application
 import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonSizeSpec
@@ -12,9 +11,7 @@ import com.skydoves.balloon.overlay.BalloonOverlayAnimation
 import com.skydoves.balloon.overlay.BalloonOverlayRect
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
-import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.create.SelectFragment
-import com.websarva.wings.android.qrcodereader.ui.fragment.history.HistoryFragment
 
 class SelectViewModel(
     private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
@@ -41,9 +38,11 @@ class SelectViewModel(
         setBalloon(fragment)
     }
     private fun setBalloon(fragment: SelectFragment){
-        _recyclerViewBalloonWeb.value = createBalloon("http,httpsから始まるウェブページのQRコードを作成できます。", fragment)
-        _recyclerViewBalloonMap.value = createBalloon("現在地などの好きな場所の座標をQRコード化できます", fragment)
-        _recyclerViewBalloonApp.value = createBalloon("端末内にインストールされているアプリのダウンロードQRコードを作成できます", fragment)
+        getApplication<Application>().applicationContext?.let {
+            _recyclerViewBalloonWeb.value = createBalloon(it.getString(R.string.create_description_balloon0), fragment)
+            _recyclerViewBalloonMap.value = createBalloon(it.getString(R.string.create_description_balloon1), fragment)
+            _recyclerViewBalloonApp.value = createBalloon(it.getString(R.string.create_description_balloon2), fragment)
+        }
     }
     private fun createBalloon(text: String, fragment: SelectFragment): Balloon{
         return com.skydoves.balloon.createBalloon(getApplication<Application>().applicationContext) {
