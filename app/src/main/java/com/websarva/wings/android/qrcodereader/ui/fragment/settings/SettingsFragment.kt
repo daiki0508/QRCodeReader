@@ -46,10 +46,9 @@ class SettingsFragment: Fragment() {
             bottomNavViewModel.let {
                 it.bottomNavView().value!!.showAlignTop(it.bottomNavBalloonSettings().value!!)
 
-                // チュートリアル終了
                 it.bottomNavBalloonSettings().value!!.setOnBalloonDismissListener {
                     // 終了状態を保存
-                    it.write()
+                    viewModel.write()
 
                     // 元の画面に遷移
                     val transaction = activity?.supportFragmentManager?.beginTransaction()

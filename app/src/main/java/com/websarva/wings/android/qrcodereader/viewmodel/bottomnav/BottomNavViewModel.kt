@@ -115,11 +115,6 @@ class BottomNavViewModel(
         }
     }
 
-    fun write(){
-        // チュートリアルの終了
-        PreferenceBalloonRepositoryClient().save(getApplication<Application>().applicationContext)
-    }
-
     fun bottomNavView(): MutableLiveData<View>{
         return _bottomNavView
     }

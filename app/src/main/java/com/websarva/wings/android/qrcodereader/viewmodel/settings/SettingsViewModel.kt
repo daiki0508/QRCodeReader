@@ -15,4 +15,8 @@ class SettingsViewModel(
             preferenceBalloonRepository.read(this)
         }
     }
+    fun write(){
+        // チュートリアルの終了
+        preferenceBalloonRepository.save(getApplication<Application>().applicationContext)
+    }
 }

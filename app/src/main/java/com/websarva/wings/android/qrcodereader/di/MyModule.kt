@@ -1,9 +1,6 @@
 package com.websarva.wings.android.qrcodereader.di
 
-import com.websarva.wings.android.qrcodereader.repository.PreferenceBalloonRepositoryClient
-import com.websarva.wings.android.qrcodereader.repository.PreferenceHistoryRepositoryClient
-import com.websarva.wings.android.qrcodereader.repository.PreferenceMapRepositoryClient
-import com.websarva.wings.android.qrcodereader.repository.SaveBitmapClientRepository
+import com.websarva.wings.android.qrcodereader.repository.*
 import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.create.DisplayViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.create.SelectViewModel
@@ -12,6 +9,7 @@ import com.websarva.wings.android.qrcodereader.viewmodel.create.map.CreateMapVie
 import com.websarva.wings.android.qrcodereader.viewmodel.create.web.CreateUrlViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.history.HistoryViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.PrivateMainViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.scan.ScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.scan.AfterScanViewModel
 import com.websarva.wings.android.qrcodereader.viewmodel.scan.camera.CameraViewModel
@@ -23,6 +21,7 @@ import org.koin.dsl.module
 class MyModule {
     val module = module {
         viewModel { MainViewModel() }
+        viewModel { PrivateMainViewModel(get(), get()) }
         viewModel { BottomNavViewModel(get()) }
         viewModel { ScanViewModel(get(), get()) }
         viewModel { CameraViewModel(get()) }
@@ -41,5 +40,6 @@ class MyModule {
         factory { SaveBitmapClientRepository() }
         factory { PreferenceMapRepositoryClient() }
         factory { PreferenceBalloonRepositoryClient() }
+        factory { AppUpdateRepositoryClient() }
     }
 }

@@ -8,16 +8,38 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import com.websarva.wings.android.qrcodereader.BuildConfig
 import com.websarva.wings.android.qrcodereader.databinding.ActivityMainBinding
 import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragment
 import com.websarva.wings.android.qrcodereader.viewmodel.main.MainViewModel
+import com.websarva.wings.android.qrcodereader.viewmodel.main.PrivateMainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModel()
+
+    private val mainViewModel: MainViewModel by viewModel()
+    private val viewModel: PrivateMainViewModel by viewModel()
+
+    override fun onStart() {
+        super.onStart()
+
+        // アップデートの開始
+        if (viewModel.connectingStatus() != null && !BuildConfig.DEBUG){
+            viewModel.appUpdate(this)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // アプリのアップデートの再開
+        if (viewModel.connectingStatus() != null && !BuildConfig.DEBUG){
+            viewModel.restartUpdate(this)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         // fragmentの起動
         supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
 
-        if (viewModel.state().value == null){
+        if (mainViewModel.state().value == null){
             if (intent.action != Intent.ACTION_SEND){
                 Log.d("intent", "null")
                 supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
