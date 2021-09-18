@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModel()
     private val viewModel: PrivateMainViewModel by viewModel()
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
 
         // アップデートの開始
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.connectingStatus() != null && !BuildConfig.DEBUG){
             viewModel.restartUpdate(this)
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

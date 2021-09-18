@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QRCodeReader</string>
+    <string name="app_name">QRコードリーダー</string>
     <string name="photo_toolbar_title">画像からスキャン</string>
     <string name="rv_title_browser">ブラウザで開く</string>
     <string name="rv_title_copy">コピーする</string>
