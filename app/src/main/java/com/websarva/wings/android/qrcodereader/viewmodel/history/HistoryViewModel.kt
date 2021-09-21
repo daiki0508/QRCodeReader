@@ -24,21 +24,11 @@ class HistoryViewModel(
     private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
     application: Application
 ): AndroidViewModel(application) {
-    private val _historyBalloon = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _historyBalloon2 = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _historyBalloon3 = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _historyList = MutableLiveData<MutableList<MutableMap<String, Any>>>().apply {
-        MutableLiveData<MutableList<MutableMap<String, String>>>()
-    }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
-    }
+    private val _historyBalloon = MutableLiveData<Balloon>()
+    private val _historyBalloon2 = MutableLiveData<Balloon>()
+    private val _historyBalloon3 = MutableLiveData<Balloon>()
+    private val _historyList = MutableLiveData<MutableList<MutableMap<String, Any>>>()
+    private val _bundle = MutableLiveData<Bundle>()
 
     fun init(fragment: HistoryFragment){
         // balloonの設定

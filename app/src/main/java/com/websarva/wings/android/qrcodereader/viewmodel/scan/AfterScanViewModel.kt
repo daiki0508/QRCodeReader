@@ -16,9 +16,7 @@ class AfterScanViewModel(
     private val preferenceHistoryRepository: PreferenceHistoryRepositoryClient,
     application: Application
 ) : AndroidViewModel(application) {
-    private val _scanUri =  MutableLiveData<Uri>().apply {
-        MutableLiveData<Uri>()
-    }
+    private val _scanUri =  MutableLiveData<Uri>()
 
     fun init(scanUrl: String, fragment: AfterScanFragment){
         // グローバル変数に設定を代入

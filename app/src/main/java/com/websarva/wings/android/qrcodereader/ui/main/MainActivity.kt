@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModel()
     private val viewModel: PrivateMainViewModel by viewModel()
 
-    /*override fun onStart() {
+    override fun onStart() {
         super.onStart()
 
         // アップデートの開始
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.connectingStatus() != null && !BuildConfig.DEBUG){
             viewModel.restartUpdate(this)
         }
-    }*/
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,18 +59,23 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.hide()
 
-        // fragmentの起動
-        supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
+        // update完了flagのobserver
+        viewModel.flag().observe(this, {
+            if (!it){
+                // fragmentの起動
+                supportFragmentManager.beginTransaction().replace(binding.fragment.id, BottomNavFragment()).commit()
 
-        if (mainViewModel.state().value == null){
-            if (intent.action != Intent.ACTION_SEND){
-                Log.d("intent", "null")
-                supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
-            }else{
-                Log.d("intent", "intent")
-                handleSendImage(intent)
+                if (mainViewModel.state().value == null){
+                    if (intent.action != Intent.ACTION_SEND){
+                        Log.d("intent", "null")
+                        supportFragmentManager.beginTransaction().replace(binding.container.id, ScanFragment()).commit()
+                    }else{
+                        Log.d("intent", "intent")
+                        handleSendImage(intent)
+                    }
+                }
             }
-        }
+        })
 
         // bundleのobserver
         viewModel.bundle().observe(this, {

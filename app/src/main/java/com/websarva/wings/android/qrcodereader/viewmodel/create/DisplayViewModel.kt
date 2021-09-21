@@ -21,9 +21,7 @@ class DisplayViewModel(
     private val saveBitmapClient: SaveBitmapClientRepository,
     application: Application
 ): AndroidViewModel(application) {
-    private val _qrBitmap = MutableLiveData<Bitmap>().apply {
-        MutableLiveData<String>()
-    }
+    private val _qrBitmap = MutableLiveData<Bitmap>()
     private val _qrCodeUri = MutableLiveData<Uri?>().apply {
         MutableLiveData<Uri?>()
     }

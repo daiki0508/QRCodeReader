@@ -1,5 +1,6 @@
 package com.websarva.wings.android.qrcodereader.viewmodel.main
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -23,6 +24,7 @@ class PrivateMainViewModel(
     private val _bundle = MutableLiveData<Bundle>().apply {
         MutableLiveData<Bundle>()
     }
+    private val _flag = MutableLiveData<Boolean>()
 
     fun connectingStatus(): NetworkCapabilities? {
         val connectivityManager =
@@ -30,16 +32,16 @@ class PrivateMainViewModel(
         // 戻り値がnullでなければ、ネットワークに接続されている
         return connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
     }
-    fun appUpdate(activity: MainActivity){
+    fun appUpdate(activity: Activity){
         viewModelScope.launch {
             appUpdateRepository.appUpdate(activity)
         }
     }
-    fun restartUpdate(activity: MainActivity){
+    fun restartUpdate(activity: Activity){
         // updateがない、もしくは完了している場合はfalseを返す
         viewModelScope.launch {
-            val updateFlag = appUpdateRepository.restartUpdate(activity)
-            if (!updateFlag){
+            _flag.value = appUpdateRepository.restartUpdate(activity)
+            if (!_flag.value!!){
                 Log.i("update", "complete or noUpdate")
             }
         }
@@ -64,5 +66,8 @@ class PrivateMainViewModel(
 
     fun bundle(): MutableLiveData<Bundle>{
         return _bundle
+    }
+    fun flag(): MutableLiveData<Boolean>{
+        return _flag
     }
 }

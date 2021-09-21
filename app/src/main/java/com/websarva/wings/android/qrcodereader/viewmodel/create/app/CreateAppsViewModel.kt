@@ -11,12 +11,8 @@ import com.websarva.wings.android.qrcodereader.model.IntentBundle
 class CreateAppsViewModel(
     application: Application
 ): AndroidViewModel(application) {
-    private val _appList = MutableLiveData<MutableList<MutableMap<String, Any>>>().apply {
-        MutableLiveData<MutableMap<String, Any>>()
-    }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
-    }
+    private val _appList = MutableLiveData<MutableList<MutableMap<String, Any>>>()
+    private val _bundle = MutableLiveData<Bundle>()
 
     fun getAppsInfo(){
         // インストールされているアプリケーション情報を取得

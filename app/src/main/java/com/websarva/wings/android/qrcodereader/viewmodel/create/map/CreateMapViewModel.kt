@@ -21,15 +21,9 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.create.map.CreateMapF
 class CreateMapViewModel(
     private val preferenceMapRepository: PreferenceMapRepositoryClient, application: Application
 ): AndroidViewModel(application) {
-    private val _likelyPlaceLatLngs = MutableLiveData<LatLng>().apply {
-        MutableLiveData<LatLng>()
-    }
-    private val _requestPermission = MutableLiveData<ActivityResultLauncher<String>>().apply {
-        MutableLiveData<ActivityResultLauncher<String>>()
-    }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
-    }
+    private val _likelyPlaceLatLngs = MutableLiveData<LatLng>()
+    private val _requestPermission = MutableLiveData<ActivityResultLauncher<String>>()
+    private val _bundle = MutableLiveData<Bundle>()
 
     fun init(fragment: CreateMapFragment){
         // requestPermissionの設定

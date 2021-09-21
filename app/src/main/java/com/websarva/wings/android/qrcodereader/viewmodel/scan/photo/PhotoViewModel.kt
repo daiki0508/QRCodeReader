@@ -22,18 +22,10 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.scan.photo.PhotoFragm
 class PhotoViewModel(
     application: Application
 ) : AndroidViewModel(application) {
-    private val _launcher = MutableLiveData<ActivityResultLauncher<Intent>>().apply {
-        MutableLiveData<ActivityResultLauncher<Intent>>()
-    }
-    private val _qrcode = MutableLiveData<Bitmap>().apply {
-        MutableLiveData<Bitmap>()
-    }
-    private val _url = MutableLiveData<String>().apply {
-        MutableLiveData<String>()
-    }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
-    }
+    private val _launcher = MutableLiveData<ActivityResultLauncher<Intent>>()
+    private val _qrcode = MutableLiveData<Bitmap>()
+    private val _url = MutableLiveData<String>()
+    private val _bundle = MutableLiveData<Bundle>()
 
     fun init(fragment: PhotoFragment){
         _launcher.value = fragment.registerForActivityResult(

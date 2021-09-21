@@ -17,21 +17,11 @@ class SelectViewModel(
     private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
     application: Application
 ): AndroidViewModel(application) {
-    private val _recyclerViewBalloonWeb = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _recyclerViewBalloonMap = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _recyclerViewBalloonApp = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _holderView0 = MutableLiveData<View>().apply {
-        MutableLiveData<View>()
-    }
-    private val _holderView1 = MutableLiveData<View>().apply {
-        MutableLiveData<View>()
-    }
+    private val _recyclerViewBalloonWeb = MutableLiveData<Balloon>()
+    private val _recyclerViewBalloonMap = MutableLiveData<Balloon>()
+    private val _recyclerViewBalloonApp = MutableLiveData<Balloon>()
+    private val _holderView0 = MutableLiveData<View>()
+    private val _holderView1 = MutableLiveData<View>()
 
     fun init(fragment: SelectFragment){
         // balloonの設定

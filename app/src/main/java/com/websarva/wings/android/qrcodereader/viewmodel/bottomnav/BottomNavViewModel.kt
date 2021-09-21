@@ -18,33 +18,15 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.bottomnav.BottomNavFr
 class BottomNavViewModel(
     application: Application
 ) : AndroidViewModel(application) {
-    private val _bottomNavView = MutableLiveData<View>().apply {
-        MutableLiveData<View>()
-    }
-    private val _bottomNavBalloonScan = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _bottomNavBalloonCreate = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _bottomNavBalloonHistory = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _bottomNavBalloonSettings = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _bottomNavScanCalled = MutableLiveData<Boolean>().apply {
-        MutableLiveData<Boolean>()
-    }
-    private val _bottomNavCreateCalled = MutableLiveData<Boolean>().apply {
-        MutableLiveData<Boolean>()
-    }
-    private val _bottomNavHistoryCalled = MutableLiveData<Boolean>().apply {
-        MutableLiveData<Boolean>()
-    }
-    private val _bottomNavSettingsCalled = MutableLiveData<Boolean>().apply {
-        MutableLiveData<Boolean>()
-    }
+    private val _bottomNavView = MutableLiveData<View>()
+    private val _bottomNavBalloonScan = MutableLiveData<Balloon>()
+    private val _bottomNavBalloonCreate = MutableLiveData<Balloon>()
+    private val _bottomNavBalloonHistory = MutableLiveData<Balloon>()
+    private val _bottomNavBalloonSettings = MutableLiveData<Balloon>()
+    private val _bottomNavScanCalled = MutableLiveData<Boolean>()
+    private val _bottomNavCreateCalled = MutableLiveData<Boolean>()
+    private val _bottomNavHistoryCalled = MutableLiveData<Boolean>()
+    private val _bottomNavSettingsCalled = MutableLiveData<Boolean>()
 
     fun init(fragment: BottomNavFragment, navView: View){
         _bottomNavView.value = navView

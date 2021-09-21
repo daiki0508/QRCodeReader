@@ -18,12 +18,8 @@ import com.websarva.wings.android.qrcodereader.ui.fragment.scan.camera.BundleEve
 class CameraViewModel(
     application: Application
 ): AndroidViewModel(application) {
-    private val _barcodeView = MutableLiveData<CompoundBarcodeView>().apply {
-        MutableLiveData<CompoundBarcodeView>()
-    }
-    private val _bundle = MutableLiveData<BundleEvent<Bundle>>().apply {
-        MutableLiveData<BundleEvent<Bundle>>()
-    }
+    private val _barcodeView = MutableLiveData<CompoundBarcodeView>()
+    private val _bundle = MutableLiveData<BundleEvent<Bundle>>()
     val bundle: LiveData<BundleEvent<Bundle>> = _bundle
 
     fun init(barcodeView: CompoundBarcodeView, fragment: CameraFragment){

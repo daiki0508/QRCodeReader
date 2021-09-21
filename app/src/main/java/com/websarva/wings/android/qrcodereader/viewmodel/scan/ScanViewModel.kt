@@ -18,15 +18,9 @@ class ScanViewModel(
     private val preferenceBalloonRepository: PreferenceBalloonRepositoryClient,
     application: Application
 ): AndroidViewModel(application) {
-    private val _photoBalloon = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _cameraBalloon = MutableLiveData<Balloon>().apply {
-        MutableLiveData<Balloon>()
-    }
-    private val _bundle = MutableLiveData<Bundle>().apply {
-        MutableLiveData<Bundle>()
-    }
+    private val _photoBalloon = MutableLiveData<Balloon>()
+    private val _cameraBalloon = MutableLiveData<Balloon>()
+    private val _bundle = MutableLiveData<Bundle>()
 
     fun init(fragment: ScanFragment){
         // balloonの設定
