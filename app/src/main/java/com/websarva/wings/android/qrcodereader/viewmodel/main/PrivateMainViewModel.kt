@@ -70,4 +70,7 @@ class PrivateMainViewModel(
     fun flag(): MutableLiveData<Boolean>{
         return _flag
     }
+    fun setDebugFlag(){
+        _flag.value = false
+    }
 }

@@ -97,6 +97,10 @@ class BottomNavViewModel(
         }
     }
 
+    fun setBottomNavScanCalled(){
+        _bottomNavScanCalled.value = true
+    }
+
     fun bottomNavView(): MutableLiveData<View>{
         return _bottomNavView
     }

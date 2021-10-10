@@ -6,15 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.websarva.wings.android.qrcodereader.BuildConfig
 import com.websarva.wings.android.qrcodereader.R
 import com.websarva.wings.android.qrcodereader.ui.fragment.scan.ScanFragment
+import com.websarva.wings.android.qrcodereader.viewmodel.bottomnav.BottomNavViewModel
 
 class ParentPreferenceFragment: PreferenceFragmentCompat() {
     private lateinit var transaction: FragmentTransaction
+    private val bottomNavViewModel: BottomNavViewModel by activityViewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference, rootKey)
@@ -34,6 +37,7 @@ class ParentPreferenceFragment: PreferenceFragmentCompat() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
                 }
+                bottomNavViewModel.setBottomNavScanCalled()
                 transaction.setCustomAnimations(R.anim.nav_dynamic_pop_enter_anim, R.anim.nav_dynamic_pop_exit_anim)
                 transaction.replace(R.id.container, ScanFragment()).commit()
 

@@ -59,6 +59,11 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.hide()
 
+        // debug時のみの処理
+        if (BuildConfig.DEBUG){
+            viewModel.setDebugFlag()
+        }
+
         // update完了flagのobserver
         viewModel.flag().observe(this, {
             if (!it){
