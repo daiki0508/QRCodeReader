@@ -34,6 +34,6 @@
         <Preference
             app:key="version"
             app:title="アプリのバージョン"
-            app:summary="1.1" />
+            app:summary="1.1.1" />
     </PreferenceCategory>
 </PreferenceScreen>
